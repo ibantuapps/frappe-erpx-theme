@@ -1,0 +1,12 @@
+{
+ "doctype": "Page",
+ "name": "coa-card-view",
+ "page_name": "coa-card-view",
+ "title": "COA Card View",
+ "module": "Erpx New Custom Theme",
+ "standard": "Yes",
+ "roles": [
+  {"role": "Accounts Manager"},
+  {"role": "Accounts User"}
+ ]
+}

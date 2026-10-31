@@ -1,0 +1,877 @@
+/* ============================================================
+   ERPX - Fund statement report skin
+   Applied to the "Perubahan Dana" report page (Terikat / Tidak Terikat).
+   Targets markup injected by the report's own JavaScript:
+     .infak-title   page heading + action buttons
+     .infak-bar     active filters bar (company, period, date range)
+     .infak-kpi     KPI summary cards
+     .infak-letterhead / .infak-doc-*  official statement letterhead
+     .infak-ctl     operational control panel
+     .infak-foot    page footer
+   Layout + colors mirror the Figma design "ERPx" node 925-986.
+   ============================================================ */
+
+.infak-report,
+.infak-report * {
+  box-sizing: border-box;
+}
+
+/* ------------------------------------------------------------
+   Page heading
+   ------------------------------------------------------------ */
+
+.infak-title {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0 14px;
+}
+
+.infak-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.infak-title-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.infak-title-org {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.6px;
+  color: #0f172a;
+  line-height: 32px;
+}
+
+.infak-title-sub {
+  font-size: 14px;
+  font-weight: 400;
+  color: #64748b;
+  line-height: 20px;
+}
+
+.infak-title-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------
+   Buttons
+   ------------------------------------------------------------ */
+
+.infak-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #334155;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 9px 15px;
+  cursor: pointer;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.infak-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.infak-btn.primary {
+  background: #11213b;
+  border-color: #11213b;
+  color: #fff;
+}
+
+.infak-btn.primary:hover {
+  background: #1b3257;
+  border-color: #1b3257;
+}
+
+.infak-btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------
+   Active filters bar
+   ------------------------------------------------------------ */
+
+.infak-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.infak-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.infak-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+/* Labelled inputs */
+.infak-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.infak-field-l {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.infak-input {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: #0f172a;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 7px 10px;
+  min-width: 160px;
+  height: 34px;
+  outline: none;
+}
+
+.infak-input:focus {
+  border-color: #11213b;
+  box-shadow: 0 0 0 2px rgba(17, 33, 59, 0.08);
+}
+
+.infak-input[disabled],
+.infak-input.static {
+  background: #f8fafc;
+  color: #334155;
+  cursor: not-allowed;
+}
+
+.infak-range {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.infak-range .infak-input {
+  min-width: 132px;
+}
+
+/* Status chips */
+.infak-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #334155;
+  background: #f1f5f9;
+  border-radius: 4px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+
+.infak-chip.valid {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  font-weight: 600;
+}
+
+.infak-chip.warn {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fcd34d;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------
+   KPI summary cards
+   ------------------------------------------------------------ */
+
+.infak-kpi {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 14px 0 16px;
+}
+
+.infak-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 116px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-top: 4px solid #6b7280;
+  border-radius: 12px;
+  padding: 13px 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.infak-card.in {
+  border-top-color: #10b981;
+}
+
+.infak-card.out {
+  border-top-color: #ef4444;
+}
+
+.infak-card.net {
+  border-top-color: #3b82f6;
+}
+
+.infak-card.end {
+  background: #11213b;
+  border-color: #11213b;
+  border-top-color: #10b981;
+  color: #fff;
+}
+
+.infak-card-t {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.infak-card.in .infak-card-t {
+  color: #059669;
+}
+
+.infak-card.out .infak-card-t {
+  color: #dc2626;
+}
+
+.infak-card.end .infak-card-t {
+  color: #9ca3af;
+}
+
+.infak-card-v {
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 6px 0 4px;
+  white-space: nowrap;
+  color: #0f172a;
+}
+
+.infak-card.in .infak-card-v {
+  color: #059669;
+}
+
+.infak-card.out .infak-card-v {
+  color: #dc2626;
+}
+
+.infak-card.end .infak-card-v {
+  color: #fff;
+}
+
+.infak-card-s {
+  margin-top: auto;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #94a3b8;
+}
+
+.infak-card-s b {
+  color: #475569;
+  font-weight: 600;
+}
+
+.infak-card.end .infak-card-s {
+  color: #cbd5e1;
+}
+
+.infak-card.end .infak-card-s b {
+  color: #fff;
+}
+
+.infak-pill {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  border-radius: 9999px;
+  padding: 1px 9px;
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.infak-pill.bad {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+/* ------------------------------------------------------------
+   Official statement letterhead
+   ------------------------------------------------------------ */
+
+.infak-letterhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  padding: 10px 16px;
+  margin-top: 6px;
+}
+
+.infak-lh-left {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #11213b;
+  text-transform: uppercase;
+}
+
+.infak-lh-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.infak-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  padding: 2px 10px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.infak-tag.ok {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+.infak-tag.info {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+/* ------------------------------------------------------------
+   Operational control panel
+   ------------------------------------------------------------ */
+
+.infak-ctl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0 0;
+}
+
+.infak-ctl-box {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #6b7280;
+  border-radius: 12px;
+  padding: 13px 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.infak-ctl-box.lock {
+  border-left-color: #f59e0b;
+}
+
+.infak-ctl-box.amil {
+  border-left-color: #10b981;
+}
+
+.infak-ctl-box.simba {
+  border-left-color: #3b82f6;
+}
+
+.infak-ctl-t {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.infak-ctl-v {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.infak-ctl-d {
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: #64748b;
+}
+
+.infak-ctl-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11.5px;
+  color: #475569;
+  padding: 2px 0;
+}
+
+.infak-ctl-row b {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.infak-ctl-code {
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: #334155;
+}
+
+/* ------------------------------------------------------------
+   Page footer
+   ------------------------------------------------------------ */
+
+.infak-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 18px;
+  padding-top: 10px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.infak-foot-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.infak-foot-links a {
+  color: #11213b;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.infak-foot-links a:hover {
+  text-decoration: underline;
+}
+
+/* ------------------------------------------------------------
+   Official statement table (Frappe DataTable overrides)
+   Goal: calm + high legibility.
+   Row tones are driven by marker classes emitted by the report
+   formatter (.inf-row--section / --subtotal / --closing / --blank)
+   combined with :has(), so a tone fills the WHOLE row across all
+   columns instead of only the description cell. Without :has()
+   support the table still renders, just without the row bands.
+   ------------------------------------------------------------ */
+
+.infak-report .datatable {
+  --dt-border-color: #e9eef4;
+  --dt-cell-bg: #ffffff;
+  margin-left: 0;
+}
+
+.infak-report .dt-cell {
+  font-family: inherit;
+  font-size: 12.5px;
+}
+
+/* The tallest content in a 40px row is a two-line description (name +
+   sub-caption = ~30px). The datatable's default 8px vertical padding only
+   leaves 24px, which clipped the sub-caption, so trim it to 4px (32px of
+   content) and centre every cell vertically. */
+.infak-report .dt-cell__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+/* Header: one slim navy band, light text, uppercase */
+.infak-report .datatable .dt-header .dt-cell,
+.infak-report .datatable .dt-header .dt-cell__content {
+  background: #11213b;
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.infak-report .dt-header .dt-cell--col-1 .dt-cell__content,
+.infak-report .dt-header .dt-cell--col-2 .dt-cell__content,
+.infak-report .dt-header .dt-cell--col-3 .dt-cell__content {
+  text-align: right;
+}
+
+.infak-report .dt-cell__content--col-0 {
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+/* ---- Row tones (full width, banded as in the Figma statement) ----
+   Order matters: --subtotal is the base for total rows, then --in /
+   --out override it (same specificity, later wins). */
+
+.infak-report .dt-cell:has(.inf-row--section) {
+  background: #f1f5f9;
+}
+
+.infak-report .dt-cell:has(.inf-row--section):first-child {
+  box-shadow: inset 3px 0 0 #11213b;
+}
+
+.infak-report .dt-cell:has(.inf-row--sec-a):first-child {
+  box-shadow: inset 3px 0 0 #047857;
+}
+
+.infak-report .dt-cell:has(.inf-row--sec-b):first-child {
+  box-shadow: inset 3px 0 0 #b91c1c;
+}
+
+.infak-report .dt-cell:has(.inf-row--sec-c):first-child {
+  box-shadow: inset 3px 0 0 #1d4ed8;
+}
+
+.infak-report .dt-cell:has(.inf-row--group) {
+  background: #f8fafc;
+}
+
+.infak-report .dt-cell:has(.inf-row--subtotal) {
+  background: #f8fafc;
+  border-top: 1px solid #94a3b8;
+}
+
+.infak-report .dt-cell:has(.inf-row--in) {
+  background: #f2fcf6;
+  border-top: 1px solid #86efac;
+}
+
+.infak-report .dt-cell:has(.inf-row--out) {
+  background: #fdf3f3;
+  border-top: 1px solid #fca5a5;
+}
+
+.infak-report .dt-cell:has(.inf-row--surplus) {
+  background: #f0fdf4;
+  border-top: 1px solid #d1fae5;
+}
+
+.infak-report .dt-cell:has(.inf-row--closing) {
+  background: #fffbeb;
+  border-top: 2px solid #11213b;
+}
+
+.infak-report .dt-cell:has(.inf-row--blank) {
+  background: transparent;
+  border-top: 0;
+}
+
+/* ---- Description cell: inline COA code + name + optional sub-caption ---- */
+
+.infak-report .inf-desc {
+  display: block;
+  /* Two lines of the 12.5px/1.25 text (~31px). Anything taller is clipped
+     cleanly at a line boundary instead of bleeding over the next row. */
+  max-height: 32px;
+  overflow: hidden;
+}
+
+.infak-report .inf-acc-code {
+  display: inline-block;
+  min-width: 46px;
+  margin-right: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: #8c98a8;
+}
+
+.infak-report .inf-name {
+  display: inline;
+  line-height: 1.25;
+}
+
+/* A row that also carries a sub-caption must keep its name on ONE line,
+   otherwise the sub-caption (e.g. "(Surplus/Defisit + Saldo Awal Neraca
+   Mutasi COA 3201)") is pushed out of the fixed 40px row. */
+.infak-report .inf-desc:has(.inf-sub) .inf-name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.infak-report .inf-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 10.5px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #94a3b8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.infak-report .inf-desc--section {
+  font-weight: 800;
+  font-size: 11.5px;
+  letter-spacing: 0.3px;
+  color: #11213b;
+}
+
+.infak-report .inf-desc--group,
+.infak-report .inf-desc--total {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.infak-report .inf-desc--account {
+  font-weight: 400;
+  color: #334155;
+}
+
+/* ---- Amounts ---- */
+
+.infak-report .inf-num {
+  display: block;
+  width: 100%;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.infak-report .inf-num--neg {
+  color: #b91c1c;
+}
+
+.infak-report .inf-num--zero {
+  color: #c3ccd8;
+  font-weight: 400;
+}
+
+.infak-report .inf-num--total {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Fund-direction tones come last so they win over .inf-num--total */
+.infak-report .inf-num--in {
+  color: #047857;
+}
+
+.infak-report .inf-num--out {
+  color: #b91c1c;
+}
+
+/* ---- Section COA pill (right-aligned in the total column) ---- */
+
+.infak-report .inf-coapill {
+  display: block;
+  width: fit-content;
+  align-self: flex-end;
+  margin-left: auto;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.infak-report .inf-coapill--a {
+  color: #047857;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.infak-report .inf-coapill--b {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.infak-report .inf-coapill--c {
+  color: #1d4ed8;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+/* ---- Row chip (e.g. "Dana Jasa Giro") ---- */
+
+.infak-report .inf-chip {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 9999px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  vertical-align: middle;
+  color: #1d4ed8;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+/* ---- COA code (kept for the PDF/Excel builders and the legacy column) ---- */
+
+.infak-report .inf-code {
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: #7c8798;
+}
+
+.infak-report .inf-code--section {
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #1d4ed8;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 9999px;
+  padding: 1px 9px;
+}
+
+/* ---- Amil rate badge (Beban Amil 12,5% / 20%) ---- */
+
+.infak-report .inf-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  vertical-align: middle;
+  color: #047857;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+/* ---- Table footnote: legal line + document control ---- */
+
+.infak-tblfoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: -1px;
+  padding: 9px 14px;
+  border: 1px solid #e9eef4;
+  border-top: 1px solid #cbd5e1;
+  border-radius: 0 0 8px 8px;
+  background: #f8fafc;
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: #6b7787;
+}
+
+.infak-tblfoot-r {
+  font-weight: 700;
+  color: #334155;
+  white-space: nowrap;
+}
+
+/* Optional: hide Frappe's own filter bar when the custom bar is active */
+.page-form.infak-hide-form {
+  display: none !important;
+}
+
+/* ------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------ */
+
+@media (max-width: 1400px) {
+  .infak-kpi {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1100px) {
+  .infak-ctl {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+}
+
+/* ------------------------------------------------------------
+   Print
+   ------------------------------------------------------------ */
+
+@media print {
+  .infak-bar,
+  .infak-title-actions,
+  .infak-foot-links,
+  .infak-hide-form .page-form {
+    display: none !important;
+  }
+
+  .infak-card,
+  .infak-ctl-box {
+    box-shadow: none;
+  }
+}

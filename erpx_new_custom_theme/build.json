@@ -1,0 +1,23 @@
+{
+  "css/custom1.css": [
+    "public/css/custom1.css"
+  ],
+  "css/custom2.css": [
+    "public/css/custom2.css"
+  ],
+  "css/frappe-form-modern.css": [
+    "public/css/frappe-form-modern.css"
+  ],
+  "css/custom20.css": [
+    "public/css/custom20.css"
+  ],
+  "css/frappe-list-modern.css": [
+    "public/css/frappe-list-modern.css"
+  ],
+  "css/coa_card_view.css": [
+    "public/css/coa_card_view.css"
+  ],
+  "js/coa_card_view.js": [
+    "public/js/coa_card_view.js"
+  ]
+}

@@ -1,0 +1,555 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* ============================================================
+   ERPX — Custom Theme (Figma ERPx file)
+   Palette dari get_variable_defs:
+     primary  #172C4F   Primary  #0B1627   fade #979797
+     link     #0022FF   c14/300  #E0E0E0    c14/500 #9E9E9E
+     text-reg #000000b2 border   #00000040  b-dark  #00000080
+   Font: Poppins
+   ============================================================ */
+
+:root {
+  --brand:        #172C4F;
+  --brand-dark:   #0B1627;
+  --link:         #0022FF;
+  --fade:         #979797;
+  --c14-300:      #E0E0E0;
+  --c14-500:      #9E9E9E;
+
+  --bg-page:      #F4F5F7;
+  --bg-card:      #FFFFFF;
+  --border:       rgba(0,0,0,0.12);   /* lebih soft dari #00000040 */
+  --border-strong:rgba(0,0,0,0.25);
+
+  --tx-1:  #0B1627;
+  --tx-2:  rgba(0,0,0,0.70);
+  --tx-3:  #979797;
+
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+
+  --sh-card: 0 1px 3px rgba(11,22,39,0.08), 0 1px 2px rgba(11,22,39,0.04);
+  --sh-hover: 0 6px 18px rgba(11,22,39,0.12);
+}
+
+/* ---------- Global & Typography ---------- */
+
+html, body {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 14px !important;
+  background: var(--bg-page) !important;
+  color: var(--tx-2) !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  background: #fff !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: none !important;
+  height: 52px !important;
+}
+.navbar .breadcrumb,
+.breadcrumb-container .breadcrumb {
+  font-size: 13px !important;
+  color: var(--tx-2) !important;
+}
+.breadcrumb-container .breadcrumb li.active {
+  color: var(--tx-1) !important;
+  font-weight: 600 !important;
+}
+
+/* ---------- Block-list / widget dropdown stacking (workspace builder) ---------- */
+/* Only force visible on dropdown-lists that are NOT hidden */
+.block-list-container {
+  overflow: visible !important;
+}
+.block-list-container .dropdown-list:not(.hidden) {
+  z-index: 9999 !important;
+  position: absolute !important;
+  overflow: visible !important;
+  clip: none !important;
+}
+.dropdown-list:not(.hidden) {
+  z-index: 9999 !important;
+  position: absolute !important;
+  overflow: visible !important;
+}
+.widget:has(.dropdown-list:not(.hidden)) {
+  position: relative !important;
+  z-index: 500 !important;
+}
+.widget-body,
+.widget-content,
+.ce-block__content {
+  overflow: visible !important;
+}
+.ce-block {
+  position: relative !important;
+  z-index: 10 !important;
+}
+.codex-editor-overlay {
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+/* ---------- Sidebar (Figma node 633:2154 — navy) ---------- */
+.layout-side-section {
+  position: relative !important;
+  z-index: 100 !important;
+  width: 256px !important;
+  min-width: 256px !important;
+  background: #172C4F !important;
+  border-right: none !important;
+  padding: 0 !important;
+  min-height: calc(100vh - 52px) !important;
+}
+
+/* ---------- Dropdown / List stacking fix ---------- */
+.desk-sidebar {
+  position: relative !important;
+  z-index: 100 !important;
+}
+.sidebar-item-control .dropdown-list {
+  z-index: 200 !important;
+  position: absolute !important;
+}
+.desk-sidebar-item.standard-sidebar-item {
+  overflow: visible !important;
+}
+
+/* logo iBantu + powered-by, di-inject oleh component.js */
+.sidebar-logo {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 33px 34px 0 !important;
+}
+.sidebar-logo img,
+.sidebar-logo .logo-icon {
+  width: 162px !important;
+  height: 40px !important;
+  object-fit: contain !important;
+}
+.sidebar-logo-text {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 300 !important;
+  color: #fff !important;
+  margin-left: auto !important;
+}
+
+.desk-sidebar {
+  height: auto !important;
+  overflow: visible !important;
+  padding: 8px 0 0 !important;
+}
+/* Override icon stroke color for sidebar - icons are stroke-based SVGs */
+.desk-sidebar-item .sidebar-item-icon,
+.desk-sidebar-item .sidebar-item-icon svg {
+  --icon-stroke: #fff !important;
+  fill: #fff !important;
+  stroke: #fff !important;
+  color: #fff !important;
+}
+.standard-sidebar-label {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,0.6) !important;
+  padding: 12px 34px 5px !important;
+}
+.desk-sidebar-item.standard-sidebar-item {
+  display: flex !important;
+  align-items: center !important;
+  border-radius: 9.817px !important;
+  padding: 6px 12px !important;
+  margin: 0 34px 4px !important;
+  cursor: pointer !important;
+  transition: background .12s !important;
+}
+.desk-sidebar-item .sidebar-item-label {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  color: #fff !important;
+  white-space: nowrap !important;
+}
+.desk-sidebar-item.standard-sidebar-item:hover,
+.desk-sidebar-item.standard-sidebar-item.selected {
+  background: #2a4d78 !important;
+}
+.desk-sidebar-item.standard-sidebar-item.selected .sidebar-item-label {
+  font-weight: 500 !important;
+}
+.desk-sidebar-item .sidebar-item-icon svg {
+  width: 20px !important;
+  height: 20px !important;
+  flex: 0 0 auto !important;
+  color: #fff !important;
+}
+.sidebar-child-item.nested-container {
+  margin-left: 34px !important;
+}
+.desk-sidebar-item .sidebar-item-icon {
+  color: #fff !important;
+}
+.sidebar-item-container,
+.desk-sidebar-item {
+  margin-right: 0 !important;
+}
+
+/* ---------- Page Header (greeting area) ---------- */
+.page-head {
+  background: #fff !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 18px 24px !important;
+}
+.page-head .title-area .title-text,
+.page-title {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: var(--tx-1) !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* ---------- Workspace & Cards (full-width) ---------- */
+.page-body {
+  background: #F6F7FB !important;
+  max-width: none !important;
+}
+#body {
+  background: #F6F7FB !important;
+}
+.layout-main-section-wrapper,
+.layout-main-section,
+#editorjs,
+#editorjs.codex-editor,
+.workspace-body,
+.page-content {
+  background: #F6F7FB !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+.layout-main-section {
+  padding: 20px 24px !important;
+}
+#editorjs,
+#editorjs.codex-editor {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.widget,
+.workspace-widget,
+.links-widget-box {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: var(--sh-card) !important;
+  padding: 18px 20px !important;
+  transition: border-color .18s, box-shadow .18s, transform .18s !important;
+}
+.widget:hover,
+.workspace-widget:hover {
+  border-color: var(--brand) !important;
+  box-shadow: var(--sh-hover) !important;
+  transform: translateY(-2px) !important;
+}
+.widget-head,
+.workspace-section-head {
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.07em !important;
+  color: var(--tx-3) !important;
+  margin-bottom: 14px !important;
+  padding-bottom: 10px !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+/* ---------- Shortcut widget (Frappe: `.widget.shortcut-widget-box`) ---------- */
+.widget.shortcut-widget-box {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  box-shadow: none !important;
+  transition: border-color .15s, background .15s, transform .15s !important;
+}
+.widget.shortcut-widget-box:hover {
+  border-color: var(--brand) !important;
+  background: rgba(23,44,79,0.04) !important;
+  transform: translateY(-2px) !important;
+}
+.widget.shortcut-widget-box .widget-head {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+.widget.shortcut-widget-box .widget-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--tx-1) !important;
+}
+
+/* ---------- Link card (Figma node 193:670 — card list) ---------- */
+.widget.links-widget-box {
+  background: var(--bg-card) !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+  border-radius: 10px !important;
+  padding: 15px 20px !important;
+  box-shadow: 0px 5px 11px rgba(0,0,0,0.04) !important;
+}
+.widget.links-widget-box .widget-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #0b1627 !important;
+  margin-bottom: 4px !important;
+}
+.widget.links-widget-box .widget-body {
+  display: block !important;
+  padding-top: 4px !important;
+}
+.widget.links-widget-box .link-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  min-height: 56px !important;
+  padding: 0 10px !important;
+  border-radius: 10px !important;
+  transition: background .12s !important;
+}
+.widget.links-widget-box .link-item:hover {
+  background: rgba(23,44,79,0.05) !important;
+}
+.widget.links-widget-box .link-item .link-text {
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  color: #0b1627 !important;
+  flex: 1 !important;
+}
+/* ---------- Links Widget — underlines + icons (Figma spec) ---------- */
+.widget.links-widget-box .link-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 12px !important;
+}
+.widget.links-widget-box .link-item:last-child {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+.widget.links-widget-box .link-item .link-content {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+.widget.links-widget-box .link-item .link-icon {
+  width: 28px !important;
+  height: 28px !important;
+  flex: 0 0 auto !important;
+  background: rgba(105, 131, 223, 0.12) !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.widget.links-widget-box .link-item[data-icon="building"] .link-icon {
+  background: rgba(45, 85, 150, 0.12) !important;
+}
+.widget.links-widget-box .link-item[data-icon="people"] .link-icon {
+  background: rgba(48, 156, 144, 0.12) !important;
+}
+.widget.links-widget-box .link-item[data-icon="warehouse"] .link-icon {
+  background: rgba(249, 147, 77, 0.12) !important;
+}
+.widget.links-widget-box .link-item .link-icon svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+/* Arrow per Figma spec — show only on items that have sub-menu */
+.widget.links-widget-box .link-item.has-submenu .link-content .es-icon {
+  display: inline-flex !important;
+}
+/* Map item to icon via data-icon attribute — Figma uses:
+   Chart of accounts → ci:chart-line  (blue)
+   Company           → fluent:building-32-filled  (blue darker)
+   Customer          → fluent:people-32-regular  (teal)
+   Supplier          → ic:round-warehouse  (orange)
+*/
+.widget.links-widget-box .link-item[data-icon="chart"] .link-icon { background: rgba(105,131,223,0.15); border-radius: 10px; }
+.widget.links-widget-box .link-item[data-icon="building"] .link-icon { background: rgba(45,85,150,0.15); border-radius: 10px; }
+.widget.links-widget-box .link-item[data-icon="people"] .link-icon { background: rgba(48,156,144,0.15); border-radius: 10px; }
+.widget.links-widget-box .link-item[data-icon="warehouse"] .link-icon { background: rgba(249,147,77,0.15); border-radius: 10px; }
+
+/* Arrow kanan tiap item (Figma fluent:ios-arrow) */
+.widget.links-widget-box .link-item .link-content .es-icon {
+  flex: none !important;
+  margin-left: auto !important;
+}
+
+/* ---------- Jarak antar widget workspace (redactor flex pakai gap 0 default) ---------- */
+.codex-editor__redactor {
+  gap: 16px !important;
+}
+.ce-block {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* ---------- List View ---------- */
+.list-main-section .result,
+.frappe-list .result {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  overflow: hidden !important;
+  box-shadow: var(--sh-card) !important;
+}
+.list-row-head {
+  background: #FAFBFC !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.list-row-head .list-row-col {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.07em !important;
+  color: var(--brand) !important;
+}
+.list-row {
+  border-bottom: 1px solid var(--border) !important;
+  transition: background .12s !important;
+}
+.list-row:hover { background: #FAFBFC !important; }
+.list-row .list-row-col { font-size: 13.5px !important; }
+
+/* ---------- Form ---------- */
+.form-control,
+input.form-control,
+textarea.form-control,
+select.form-control {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  background: #fff !important;
+  padding: 9px 12px !important;
+  font-size: 13.5px !important;
+  font-family: 'Archivo', sans-serif !important;
+  color: var(--tx-1) !important;
+}
+.form-control:focus {
+  border-color: var(--brand) !important;
+  box-shadow: 0 0 0 3px rgba(23,44,79,0.12) !important;
+  outline: none !important;
+}
+.control-label, .form-label {
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: var(--tx-2) !important;
+}
+.form-layout, .frappe-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: var(--sh-card) !important;
+  padding: 20px !important;
+}
+
+/* ---------- Buttons ---------- */
+.btn-primary {
+  background: var(--brand) !important;
+  border: none !important;
+  border-radius: var(--r-md) !important;
+  padding: 7px 16px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  font-family: 'Archivo', sans-serif !important;
+  box-shadow: 0 1px 3px rgba(23,44,79,0.30) !important;
+  transition: background .15s !important;
+}
+.btn-primary:hover { background: var(--brand-dark) !important; }
+.btn-default, .btn-secondary {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  background: #fff !important;
+  color: var(--tx-1) !important;
+}
+.btn-default:hover, .btn-secondary:hover {
+  background: var(--bg-page) !important;
+  border-color: var(--brand) !important;
+}
+
+/* ---------- Table ---------- */
+.table {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  overflow: hidden !important;
+  box-shadow: var(--sh-card) !important;
+}
+.table thead th {
+  background: #FAFBFC !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: var(--tx-3) !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 10px 14px !important;
+}
+.table tbody td {
+  font-size: 13.5px !important;
+  padding: 10px 14px !important;
+  border-color: var(--border) !important;
+}
+.table tbody tr:hover td { background: #FAFBFC !important; }
+
+/* ---------- Badges ---------- */
+.indicator, .indicator-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 3px 10px !important;
+  border-radius: 999px !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  border: none !important;
+}
+.indicator::before, .indicator-pill::before { display: none !important; }
+.indicator.green,  .indicator-pill.green  { background:#d1fae5 !important; color:#065f46 !important; }
+.indicator.blue,   .indicator-pill.blue   { background:#dbeafe !important; color:#1e40af !important; }
+.indicator.red,    .indicator-pill.red    { background:#fee2e2 !important; color:#991b1b !important; }
+.indicator.yellow, .indicator-pill.yellow { background:#fef3c7 !important; color:#92400e !important; }
+.indicator.grey,   .indicator-pill.grey   { background:#f3f4f6 !important; color:#4b5563 !important; }
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--c14-300); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: var(--c14-500); }
+
+/* ---------- Modal ---------- */
+.modal-content {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: 0 20px 60px rgba(11,22,39,0.18) !important;
+  overflow: hidden !important;
+}
+.modal-header {
+  background: #fff !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 16px 20px !important;
+}
+.modal-title { font-size: 16px !important; font-weight: 700 !important; color: var(--tx-1) !important; }
+.modal-footer { background: #FAFBFC !important; border-top: 1px solid var(--border) !important; padding: 12px 20px !important; }
+
+/* ---------- Mobile ---------- */
+@media (max-width: 991px) {
+  .layout-side-section { width: 100% !important; min-height: unset !important; }
+  .layout-main-section { padding: 12px !important; }
+}

@@ -1,0 +1,1491 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* ============================================================
+   ERPX — Custom Theme (Figma ERPx file)
+   Palette dari get_variable_defs:
+     primary  #172C4F   Primary  #0B1627   fade #979797
+     link     #0022FF   c14/300  #E0E0E0    c14/500 #9E9E9E
+     text-reg #000000b2 border   #00000040  b-dark  #00000080
+   Font: Poppins
+   ============================================================ */
+
+:root {
+  --brand:        #172C4F;
+  --brand-dark:   #0B1627;
+  --link:         #0022FF;
+  --fade:         #979797;
+  --c14-300:      #E0E0E0;
+  --c14-500:      #9E9E9E;
+
+  --bg-page:      #F4F5F7;
+  --bg-card:      #FFFFFF;
+  --border:       rgba(0,0,0,0.12);   /* lebih soft dari #00000040 */
+  --border-strong:rgba(0,0,0,0.25);
+
+  --tx-1:  #0B1627;
+  --tx-2:  rgba(0,0,0,0.70);
+  --tx-3:  #979797;
+
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+
+  --sh-card: 0 1px 3px rgba(11,22,39,0.08), 0 1px 2px rgba(11,22,39,0.04);
+  --sh-hover: 0 6px 18px rgba(11,22,39,0.12);
+}
+
+/* ---------- Global & Typography ---------- */
+
+html, body {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 14px !important;
+  background: var(--bg-page) !important;
+  color: var(--tx-2) !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  background: #fff !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: none !important;
+  height: 52px !important;
+}
+.navbar .breadcrumb,
+.breadcrumb-container .breadcrumb {
+  font-size: 13px !important;
+  color: var(--tx-2) !important;
+}
+.breadcrumb-container .breadcrumb li.active {
+  color: var(--tx-1) !important;
+  font-weight: 600 !important;
+}
+
+/* ---------- Block-list / widget dropdown stacking (workspace builder) ---------- */
+/* Only target workspace card dropdowns, NOT sidebar dropdowns */
+.ce-block .dropdown-list:not(.hidden),
+.widget .dropdown-list:not(.hidden),
+.block-list-container .dropdown-list:not(.hidden) {
+  z-index: 9999 !important;
+  position: absolute !important;
+  overflow: visible !important;
+  clip: none !important;
+}
+.ce-block {
+  position: relative !important;
+  z-index: 10 !important;
+}
+.ce-block:has(.dropdown-list:not(.hidden)) {
+  z-index: 500 !important;
+}
+.widget:has(.dropdown-list:not(.hidden)) {
+  position: relative !important;
+  z-index: 500 !important;
+}
+.widget-body,
+.widget-content,
+.ce-block__content {
+  overflow: visible !important;
+}
+.codex-editor-overlay {
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+/* ---------- Sidebar (Figma node 633:2154 — navy) ---------- */
+
+/* CONTEXT 1: HOME NAV (deteksi dari .desk-sidebar) */
+html body div.layout-side-section:has(.desk-sidebar),
+html body div.layout-side-section:has(.desk-sidebar) > *,
+html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar,
+html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar-item,
+html body div.layout-side-section:has(.desk-sidebar) .standard-sidebar-item,
+html body div.layout-side-section:has(.desk-sidebar) .sidebar-menu,
+html body div.layout-side-section:has(.desk-sidebar) .sidebar-item-container {
+  background: #172C4F !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar-item.selected,
+html body div.layout-side-section:has(.desk-sidebar) .standard-sidebar-item.selected {
+  background: #2a4d78 !important;
+}
+html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar-item:not(.selected),
+html body div.layout-side-section:has(.desk-sidebar) .standard-sidebar-item:not(.selected) {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+html body div.layout-side-section:has(.desk-sidebar) .sidebar-item-label,
+html body div.layout-side-section:has(.desk-sidebar) .standard-sidebar-label,
+html body div.layout-side-section:has(.desk-sidebar) .section-title {
+  color: #fff !important;
+}
+/* all icons in home sidebar — putih (drop-icon, drag-handle, setting) */
+html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar .desk-sidebar-item .es-icon,
+html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar .desk-sidebar-item button .es-icon,
+html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar .desk-sidebar-item .es-icon svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* CONTEXT 2: LIST VIEW FILTER (deteksi dari .filter-section) — ALL WHITE */
+html body div.layout-side-section:has(.filter-section),
+html body div.layout-side-section:has(.filter-section) > *,
+html body div.layout-side-section:has(.filter-section) * {
+  background: #FFFFFF !important;
+  color: #1F272E !important;
+  border: none !important;
+  outline: none !important;
+}
+html body .list-sidebar.overlay-sidebar {
+  background: #FFFFFF !important;
+}
+html body .filter-section,
+html body .save-filter-section {
+  background: #FFFFFF !important;
+}
+html body .list-sidebar .sidebar-label {
+  color: #6C757D !important;
+}
+
+/* ---------- SIDEBAR FILTER BEAUTIFY (list view) ---------- */
+html body .list-sidebar .sidebar-label {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+html body .list-sidebar .list-group-by {
+  margin: 4px 0 14px !important;
+}
+html body .list-sidebar .list-group-by-fields {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  margin-bottom: 8px !important;
+}
+html body div.layout-side-section:has(.filter-section) a.btn.list-sidebar-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  padding: 9px 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid #E5E7EB !important;
+  background: #FFFFFF !important;
+  color: #374151 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  text-align: left !important;
+  transition: border-color 0.15s ease, background 0.15s ease !important;
+}
+html body div.layout-side-section:has(.filter-section) a.btn.list-sidebar-button:hover {
+  border-color: #172C4F !important;
+  background: #F8FAFC !important;
+}
+html body div.layout-side-section:has(.filter-section) a.list-tag-preview {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  padding: 9px 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid #E5E7EB !important;
+  background: #FFFFFF !important;
+  color: #374151 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  transition: border-color 0.15s ease, background 0.15s ease !important;
+}
+html body div.layout-side-section:has(.filter-section) a.list-tag-preview:hover {
+  border-color: #172C4F !important;
+  background: #F8FAFC !important;
+}
+html body div.layout-side-section:has(.filter-section) .save-filter-section .sidebar-action > a,
+html body div.layout-side-section:has(.filter-section) .save-filter-section a.saved-filters-preview {
+  justify-content: center !important;
+  padding: 10px 12px !important;
+  border-radius: 8px !important;
+  background: #172C4F !important;
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  border: none !important;
+  transition: background 0.15s ease !important;
+}
+html body div.layout-side-section:has(.filter-section) .save-filter-section .sidebar-action > a:hover,
+html body div.layout-side-section:has(.filter-section) .save-filter-section a.saved-filters-preview:hover {
+  background: #2a4d78 !important;
+  color: #FFFFFF !important;
+}
+html body div.layout-side-section:has(.filter-section) .frappe-control input.input-with-feedback {
+  width: 100% !important;
+  padding: 9px 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid #D1D5DB !important;
+  background: #FFFFFF !important;
+  color: #1F272E !important;
+  font-size: 13px !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+html body div.layout-side-section:has(.filter-section) .frappe-control input.input-with-feedback:focus {
+  border-color: #172C4F !important;
+  box-shadow: 0 0 0 3px rgba(23, 44, 79, 0.12) !important;
+  outline: none !important;
+}
+html body div.layout-side-section:has(.filter-section) .sidebar-section + .sidebar-section {
+  margin-top: 6px !important;
+  padding-top: 10px !important;
+  border-top: 1px solid #EEF0F2 !important;
+}
+
+/* FIX skip link button background */
+.layout-side-section > button {
+  background: transparent !important;
+  color: transparent !important;
+}
+
+/* ---------- Dropdown / List stacking fix ---------- */
+.desk-sidebar {
+  position: relative !important;
+  z-index: 100 !important;
+}
+.sidebar-item-control .dropdown-list {
+  z-index: 200 !important;
+  position: absolute !important;
+}
+.desk-sidebar-item.standard-sidebar-item {
+  overflow: visible !important;
+}
+
+/* logo iBantu + powered-by, di-inject oleh component.js */
+.sidebar-logo {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 33px 34px 0 !important;
+}
+.sidebar-logo img,
+.sidebar-logo .logo-icon {
+  width: 162px !important;
+  height: 40px !important;
+  object-fit: contain !important;
+}
+.sidebar-logo-text {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 300 !important;
+  color: #fff !important;
+  margin-left: auto !important;
+}
+
+.desk-sidebar {
+  height: auto !important;
+  overflow: visible !important;
+  padding: 8px 0 0 !important;
+}
+/* Override icon stroke color for sidebar - icons are stroke-based SVGs */
+.desk-sidebar-item .sidebar-item-icon,
+.desk-sidebar-item .sidebar-item-icon svg {
+  --icon-stroke: #fff !important;
+  fill: #fff !important;
+  stroke: #fff !important;
+  color: #fff !important;
+}
+.standard-sidebar-label {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,0.6) !important;
+  padding: 12px 34px 5px !important;
+}
+.desk-sidebar-item.standard-sidebar-item {
+  display: flex !important;
+  align-items: center !important;
+  border-radius: 9.817px !important;
+  padding: 6px 12px !important;
+  margin: 0 34px 4px !important;
+  cursor: pointer !important;
+  transition: all .15s ease !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.desk-sidebar-item.standard-sidebar-item:not(.selected):hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+.desk-sidebar-item .sidebar-item-label {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  color: #fff !important;
+  white-space: nowrap !important;
+}
+.desk-sidebar-item.standard-sidebar-item:hover,
+.desk-sidebar-item.standard-sidebar-item.selected {
+  background: #2a4d78 !important;
+}
+.desk-sidebar-item.standard-sidebar-item.selected .sidebar-item-label {
+  font-weight: 500 !important;
+}
+.desk-sidebar-item .sidebar-item-icon svg {
+  width: 20px !important;
+  height: 20px !important;
+  flex: 0 0 auto !important;
+  color: #fff !important;
+}
+.sidebar-child-item.nested-container {
+  margin-left: 34px !important;
+}
+.desk-sidebar-item .sidebar-item-icon {
+  color: #fff !important;
+}
+.sidebar-item-container,
+.desk-sidebar-item {
+  margin-right: 0 !important;
+}
+
+/* ---------- Page Header (greeting area) ---------- */
+.page-head {
+  background: #fff !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 18px 24px !important;
+}
+.page-head .title-area .title-text,
+.page-title {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: var(--tx-1) !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* ---------- Workspace & Cards (full-width) ---------- */
+.page-body {
+  background: #F6F7FB !important;
+  max-width: none !important;
+}
+#body {
+  background: #F6F7FB !important;
+}
+.layout-main-section-wrapper,
+.layout-main-section,
+#editorjs,
+#editorjs.codex-editor,
+.workspace-body,
+.page-content {
+  background: #F6F7FB !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+.layout-main-section {
+  padding: 20px 24px !important;
+}
+#editorjs,
+#editorjs.codex-editor {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.widget,
+.workspace-widget,
+.links-widget-box {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: var(--sh-card) !important;
+  padding: 18px 20px !important;
+  transition: border-color .18s, box-shadow .18s, transform .18s !important;
+}
+.widget:hover,
+.workspace-widget:hover {
+  border-color: var(--brand) !important;
+  box-shadow: var(--sh-hover) !important;
+  transform: translateY(-2px) !important;
+}
+.widget-head,
+.workspace-section-head {
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.07em !important;
+  color: var(--tx-3) !important;
+  margin-bottom: 14px !important;
+  padding-bottom: 10px !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+/* ---------- Shortcut widget (Frappe: `.widget.shortcut-widget-box`) ---------- */
+.widget.shortcut-widget-box {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  box-shadow: none !important;
+  transition: border-color .15s, background .15s, transform .15s !important;
+}
+.widget.shortcut-widget-box:hover {
+  border-color: var(--brand) !important;
+  background: rgba(23,44,79,0.04) !important;
+  transform: translateY(-2px) !important;
+}
+.widget.shortcut-widget-box .widget-head {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+.widget.shortcut-widget-box .widget-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--tx-1) !important;
+}
+
+/* ---------- Link card (Figma node 193:670 — card list) ---------- */
+.widget.links-widget-box {
+  background: var(--bg-card) !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+  border-radius: 10px !important;
+  padding: 15px 20px !important;
+  box-shadow: 0px 5px 11px rgba(0,0,0,0.04) !important;
+}
+.widget.links-widget-box .widget-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #0b1627 !important;
+  margin-bottom: 4px !important;
+}
+.widget.links-widget-box .widget-body {
+  display: block !important;
+  padding-top: 4px !important;
+}
+.widget.links-widget-box .link-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  min-height: 56px !important;
+  padding: 0 10px !important;
+  border-radius: 10px !important;
+  transition: background .12s !important;
+}
+.widget.links-widget-box .link-item:hover {
+  background: rgba(23,44,79,0.05) !important;
+}
+.widget.links-widget-box .link-item .link-text {
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  color: #0b1627 !important;
+  flex: 1 !important;
+}
+/* ---------- Links Widget — underlines + icons (Figma spec) ---------- */
+.widget.links-widget-box .link-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 12px !important;
+}
+.widget.links-widget-box .link-item:last-child {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+.widget.links-widget-box .link-item .link-content {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+.widget.links-widget-box .link-item .link-icon {
+  width: 28px !important;
+  height: 28px !important;
+  flex: 0 0 auto !important;
+  background: rgba(105, 131, 223, 0.12) !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.widget.links-widget-box .link-item[data-icon="building"] .link-icon {
+  background: rgba(45, 85, 150, 0.12) !important;
+}
+.widget.links-widget-box .link-item[data-icon="people"] .link-icon {
+  background: rgba(48, 156, 144, 0.12) !important;
+}
+.widget.links-widget-box .link-item[data-icon="warehouse"] .link-icon {
+  background: rgba(249, 147, 77, 0.12) !important;
+}
+.widget.links-widget-box .link-item .link-icon svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+/* Arrow per Figma spec — show only on items that have sub-menu */
+.widget.links-widget-box .link-item.has-submenu .link-content .es-icon {
+  display: inline-flex !important;
+}
+/* Map item to icon via data-icon attribute — Figma uses:
+   Chart of accounts → ci:chart-line  (blue)
+   Company           → fluent:building-32-filled  (blue darker)
+   Customer          → fluent:people-32-regular  (teal)
+   Supplier          → ic:round-warehouse  (orange)
+*/
+.widget.links-widget-box .link-item[data-icon="chart"] .link-icon { background: rgba(105,131,223,0.15); border-radius: 10px; }
+.widget.links-widget-box .link-item[data-icon="building"] .link-icon { background: rgba(45,85,150,0.15); border-radius: 10px; }
+.widget.links-widget-box .link-item[data-icon="people"] .link-icon { background: rgba(48,156,144,0.15); border-radius: 10px; }
+.widget.links-widget-box .link-item[data-icon="warehouse"] .link-icon { background: rgba(249,147,77,0.15); border-radius: 10px; }
+
+/* Arrow kanan tiap item (Figma fluent:ios-arrow) */
+.widget.links-widget-box .link-item .link-content .es-icon {
+  flex: none !important;
+  margin-left: auto !important;
+}
+
+/* ---------- Jarak antar widget workspace (redactor flex pakai gap 0 default) ---------- */
+.codex-editor__redactor {
+  gap: 16px !important;
+}
+.ce-block {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* ---------- List View ---------- */
+.list-main-section .result,
+.frappe-list .result {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  overflow: hidden !important;
+  box-shadow: var(--sh-card) !important;
+}
+.list-row-head {
+  background: #FAFBFC !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.list-row-head .list-row-col {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.07em !important;
+  color: var(--brand) !important;
+}
+.list-row {
+  border-bottom: 1px solid var(--border) !important;
+  transition: background .12s !important;
+}
+.list-row:hover { background: #FAFBFC !important; }
+.list-row .list-row-col { font-size: 13.5px !important; }
+
+/* ---------- Form (global desk form) ----------
+   Struktur Frappe v15 yang dipakai di bawah:
+     .std-form-layout > .form-layout > .form-page
+       > .form-section.card-section > .section-head + .section-body
+         > .form-column > .frappe-control > .form-group
+             > .control-label + .control-input-wrapper
+                 > .control-input > .form-control
+                 > .control-value.like-disabled-input
+                 > .help-box
+   .section-head hanya dirender kalau section punya label (form/section.js),
+   jadi aman diberi border + aksen tanpa memunculkan garis kosong. */
+
+/* Kartu halaman form (form-layout sendiri transparan: hindari kartu bersarang) */
+.form-layout {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 16px 20px 20px !important;
+}
+.std-form-layout > .form-layout > .form-page {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: var(--sh-card) !important;
+}
+
+/* Section: pemisah halus, header kecil dengan aksen */
+.form-layout :is(.form-section, .form-dashboard-section).card-section {
+  border-bottom: 1px solid var(--border) !important;
+  padding: 18px 22px !important;
+}
+.form-layout :is(.form-section, .form-dashboard-section).card-section.hide-border,
+.form-layout :is(.form-section, .form-dashboard-section).card-section:last-child {
+  border-bottom: none !important;
+}
+.form-layout :is(.form-section, .form-dashboard-section) > .section-head {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .07em !important;
+  color: var(--brand) !important;
+  padding: 0 0 12px !important;
+  margin: 0 0 16px !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.form-layout :is(.form-section, .form-dashboard-section) > .section-head::before {
+  content: "" !important;
+  display: block !important;
+  width: 3px !important;
+  height: 13px !important;
+  border-radius: 2px !important;
+  background: var(--brand) !important;
+}
+
+/* Kolom: jarak antar kolom konsisten, kolom terakhir tanpa gutter */
+.form-layout .form-section .form-column {
+  padding-left: 0 !important;
+  padding-right: 22px !important;
+}
+.form-layout .form-section .form-column:last-child { padding-right: 0 !important; }
+.form-layout .form-column .form-column-description {
+  font-size: 12px !important;
+  color: var(--tx-3) !important;
+  margin-bottom: 10px !important;
+}
+
+/* Label field: sentence case (lebih modern dari uppercase), kontras cukup */
+.control-label, .form-label {
+  display: block !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  color: var(--tx-2) !important;
+  margin-bottom: 6px !important;
+}
+
+/* Input & select: tinggi seragam, border halus, ring fokus lembut */
+.form-control,
+input.form-control,
+textarea.form-control,
+select.form-control {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  background: #fff !important;
+  padding: 8px 12px !important;
+  font-size: 13.5px !important;
+  font-family: inherit !important;
+  color: var(--tx-1) !important;
+  box-shadow: none !important;
+  transition: border-color .15s ease, box-shadow .15s ease !important;
+}
+.form-control:focus {
+  border-color: var(--brand) !important;
+  box-shadow: 0 0 0 3px rgba(23,44,79,0.12) !important;
+  outline: none !important;
+}
+.form-control:disabled, .form-control[readonly] {
+  background: #F8FAFC !important;
+  color: var(--tx-3) !important;
+}
+.frappe-control input.form-control:not([type="checkbox"]):not([type="radio"]),
+.frappe-control select.form-control { height: 38px !important; }
+.frappe-control textarea.form-control {
+  min-height: 92px !important;
+  line-height: 1.55 !important;
+}
+
+/* Nilai read-only */
+.frappe-control .like-disabled-input,
+.frappe-control .control-value {
+  background: #F8FAFC !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  padding: 9px 12px !important;
+  min-height: 38px !important;
+  font-size: 13.5px !important;
+  color: var(--tx-1) !important;
+}
+.frappe-control .help-box {
+  font-size: 11.5px !important;
+  color: var(--tx-3) !important;
+  margin-top: 5px !important;
+}
+
+/* Tab form: underline, bukan kotak */
+.form-tabs-list {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.form-tabs-list .nav-link {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--tx-3) !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  border-radius: 0 !important;
+  padding: 10px 2px !important;
+  margin: 0 14px !important;
+  background: transparent !important;
+}
+.form-tabs-list .nav-link.active {
+  color: var(--brand) !important;
+  border-bottom-color: var(--brand) !important;
+}
+
+/* Child table (grid) */
+.form-grid {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  overflow: hidden !important;
+}
+.grid-heading-row {
+  background: #FAFBFC !important;
+  color: var(--brand) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .05em !important;
+}
+.grid-row > .row { border-bottom: 1px solid var(--border) !important; }
+.grid-row:hover > .row { background: #FAFBFC !important; }
+.grid-body .grid-static-col,
+.grid-body .row-index { font-size: 13px !important; padding: 9px 10px !important; }
+.grid-add-row { color: var(--brand) !important; font-weight: 600 !important; }
+
+/* Toolbar kecil di dalam form + kartu generik */
+.form-inner-toolbar { padding: 10px 0 !important; }
+.frappe-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: var(--sh-card) !important;
+  padding: 20px !important;
+}
+
+/* ---------- Buttons ---------- */
+.btn-primary {
+  background: var(--brand) !important;
+  border: none !important;
+  border-radius: var(--r-md) !important;
+  padding: 7px 16px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  font-family: inherit !important;
+  box-shadow: 0 1px 3px rgba(23,44,79,0.30) !important;
+  transition: background .15s !important;
+}
+.btn-primary:hover { background: var(--brand-dark) !important; }
+.btn-default, .btn-secondary {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  background: #fff !important;
+  color: var(--tx-1) !important;
+}
+.btn-default:hover, .btn-secondary:hover {
+  background: var(--bg-page) !important;
+  border-color: var(--brand) !important;
+}
+
+/* ---------- Table ---------- */
+.table {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  overflow: hidden !important;
+  box-shadow: var(--sh-card) !important;
+}
+.table thead th {
+  background: #FAFBFC !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: var(--tx-3) !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 10px 14px !important;
+}
+.table tbody td {
+  font-size: 13.5px !important;
+  padding: 10px 14px !important;
+  border-color: var(--border) !important;
+}
+.table tbody tr:hover td { background: #FAFBFC !important; }
+
+/* ---------- Badges ---------- */
+.indicator, .indicator-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 3px 10px !important;
+  border-radius: 999px !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  border: none !important;
+}
+.indicator::before, .indicator-pill::before { display: none !important; }
+.indicator.green,  .indicator-pill.green  { background:#d1fae5 !important; color:#065f46 !important; }
+.indicator.blue,   .indicator-pill.blue   { background:#dbeafe !important; color:#1e40af !important; }
+.indicator.red,    .indicator-pill.red    { background:#fee2e2 !important; color:#991b1b !important; }
+.indicator.yellow, .indicator-pill.yellow { background:#fef3c7 !important; color:#92400e !important; }
+.indicator.grey,   .indicator-pill.grey   { background:#f3f4f6 !important; color:#4b5563 !important; }
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--c14-300); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: var(--c14-500); }
+
+/* ---------- Modal ---------- */
+.modal-content {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: 0 20px 60px rgba(11,22,39,0.18) !important;
+  overflow: hidden !important;
+}
+.modal-header {
+  background: #fff !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 16px 20px !important;
+}
+.modal-title { font-size: 16px !important; font-weight: 700 !important; color: var(--tx-1) !important; }
+.modal-footer { background: #FAFBFC !important; border-top: 1px solid var(--border) !important; padding: 12px 20px !important; }
+
+/* ---------- List Sidebar Overlay (filter panel in list views) ---------- */
+/* Only apply to filter sidebar in list views, NOT the main navigation sidebar */
+.list-main-section .list-sidebar.overlay-sidebar,
+.frappe-list .list-sidebar.overlay-sidebar {
+  background: #fff !important;
+  border-left: 1px solid var(--border) !important;
+  box-shadow: -2px 0 12px rgba(11,22,39,0.06) !important;
+  padding: 16px 0 8px !important;
+}
+/* Keep navigation sidebar navy when it uses same class */
+.layout-side-section .list-sidebar.overlay-sidebar {
+  background: transparent !important;
+}
+/* Force white on filter section within list sidebar */
+.layout-main-section .filter-section,
+.layout-main-section .save-filter-section,
+.frappe-list .filter-section,
+.frappe-list .save-filter-section {
+  background: #FFFFFF !important;
+}
+/* Also force white on filter elements in list sidebar */
+.list-sidebar.overlay-sidebar .filter-section,
+.list-sidebar.overlay-sidebar .save-filter-section,
+.list-sidebar.overlay-sidebar .sidebar-menu {
+  background: #FFFFFF !important;
+}
+/* Reset ALL list-sidebar elements to consistent style */
+/* Typography scoped to list-items */
+.list-sidebar.overlay-sidebar .group-by-field > a,
+.list-sidebar.overlay-sidebar .list-sidebar-button {
+  font-family: 'Poppins', sans-serif !important;
+}
+.list-sidebar.overlay-sidebar .sidebar-section {
+  padding: 0 16px !important;
+  margin-bottom: 8px !important;
+}
+.list-sidebar.overlay-sidebar .sidebar-label {
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: var(--tx-3) !important;
+  padding: 0 0 6px 4px !important;
+  margin-bottom: 6px !important;
+  border-bottom: 1.5px solid var(--border) !important;
+}
+/* Group by field links */
+.list-sidebar.overlay-sidebar .group-by-field.list-link,
+.list-sidebar.overlay-sidebar .list-stats.list-link,
+.list-sidebar.overlay-sidebar .list-filters.list-link {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.list-sidebar.overlay-sidebar .group-by-field.list-link > a,
+.list-sidebar.overlay-sidebar .list-stats.list-link > a,
+.list-sidebar.overlay-sidebar .list-filters.list-link > a {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: var(--tx-2) !important;
+  background: #F4F5F7 !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  padding: 4px 10px !important;
+  transition: all .12s ease !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  line-height: 1.4 !important;
+}
+.list-sidebar.overlay-sidebar .group-by-field.list-link > a:hover,
+.list-sidebar.overlay-sidebar .list-stats.list-link > a:hover,
+.list-sidebar.overlay-sidebar .list-filters.list-link > a:hover {
+  background: var(--brand) !important;
+  border-color: var(--brand) !important;
+  color: #fff !important;
+}
+.list-sidebar.overlay-sidebar .list-sidebar-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: var(--tx-2) !important;
+  background: #F4F5F7 !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  padding: 4px 10px !important;
+  transition: all .12s ease !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+  line-height: 1.4 !important;
+}
+.list-sidebar.overlay-sidebar .list-sidebar-button svg.icon-xs {
+  width: 12px !important;
+  height: 12px !important;
+  opacity: 0.55 !important;
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+}
+.list-sidebar.overlay-sidebar .list-sidebar-button:hover {
+  background: var(--brand) !important;
+  border-color: var(--brand) !important;
+  color: #fff !important;
+}
+.list-sidebar.overlay-sidebar .list-sidebar-button:hover svg.icon-xs {
+  opacity: 1 !important;
+}
+/* Edit Filters link */
+.list-sidebar.overlay-sidebar .add-list-group-by.sidebar-action {
+  list-style: none !important;
+  margin: 4px 0 0 !important;
+  padding: 0 !important;
+}
+.list-sidebar.overlay-sidebar .add-group-by {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: var(--brand) !important;
+  text-decoration: none !important;
+  padding: 4px 8px !important;
+  border-radius: var(--r-sm) !important;
+  transition: background .12s !important;
+  cursor: pointer !important;
+}
+.list-sidebar.overlay-sidebar .add-group-by:hover {
+  background: rgba(23,44,79,0.06) !important;
+}
+/* Tags */
+.list-sidebar.overlay-sidebar .list-tags {
+  padding: 0 !important;
+  margin: 0 0 8px !important;
+}
+.list-sidebar.overlay-sidebar .list-tag-preview {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: var(--tx-2) !important;
+  background: #F4F5F7 !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-sm) !important;
+  padding: 2px 10px !important;
+  margin: 2px 4px 2px 0 !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all .12s ease !important;
+}
+.list-sidebar.overlay-sidebar .list-tag-preview:hover {
+  background: var(--brand) !important;
+  border-color: var(--brand) !important;
+  color: #fff !important;
+}
+/* Saved filters */
+.list-sidebar.overlay-sidebar .saved-filters-preview {
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: var(--tx-2) !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+}
+.list-sidebar.overlay-sidebar .saved-filters-preview:hover {
+  color: var(--brand) !important;
+}
+/* Stats */
+.list-sidebar.overlay-sidebar .list-stats {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.list-sidebar.overlay-sidebar .label-area {
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: var(--tx-2) !important;
+}
+/* Dropdown menu inside list sidebar */
+.list-sidebar.overlay-sidebar .dropdown-menu.show {
+  background: #fff !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  box-shadow: var(--sh-hover) !important;
+  padding: 4px !important;
+}
+.list-sidebar.overlay-sidebar .dropdown-menu.show .dropdown-item {
+  font-size: 13px !important;
+  color: var(--tx-2) !important;
+  border-radius: var(--r-sm) !important;
+  padding: 5px 10px !important;
+}
+.list-sidebar.overlay-sidebar .dropdown-menu.show .dropdown-item:hover {
+  background: rgba(23,44,79,0.06) !important;
+  color: var(--brand) !important;
+}
+/* View action button - make consistent */
+.list-sidebar.overlay-sidebar .sidebar-action.view-action,
+.list-sidebar.overlay-sidebar li.sidebar-action > a.view-action {
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: var(--tx-2) !important;
+  background: #F4F5F7 !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  padding: 4px 10px !important;
+  transition: all .12s ease !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+.list-sidebar.overlay-sidebar .sidebar-action.view-action:hover,
+.list-sidebar.overlay-sidebar li.sidebar-action > a.view-action:hover {
+  background: var(--brand) !important;
+  border-color: var(--brand) !important;
+  color: #fff !important;
+}
+
+/* === IMPROVED LIST SIDEBAR FILTER v2 === */
+/* Full-width pill buttons with proper spacing */
+.filter-section .group-by-field {
+  margin-bottom: 8px !important;
+}
+.filter-section .group-by-field:last-child {
+  margin-bottom: 0 !important;
+}
+.list-sidebar.overlay-sidebar .group-by-field.list-link > a,
+.list-sidebar.overlay-sidebar .list-sidebar-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.list-sidebar.overlay-sidebar .list-sidebar-button svg.icon-xs {
+  margin-left: auto !important;
+}
+/* Show Tags - consistent pill style */
+.show-tags {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background: #F4F5F7 !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: var(--tx-2) !important;
+  text-decoration: none !important;
+  transition: all .12s ease !important;
+}
+.show-tags:hover {
+  background: var(--brand) !important;
+  border-color: var(--brand) !important;
+  color: #fff !important;
+}
+/* Save Filter section */
+.add-list-group-by.sidebar-action {
+  margin-top: 16px !important;
+  padding-top: 16px !important;
+  border-top: 1px solid var(--border) !important;
+}
+.add-group-by {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+  background: transparent !important;
+  border: 1.5px solid var(--brand) !important;
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: var(--brand) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  transition: all .15s ease !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+}
+.add-group-by:hover {
+  background: var(--brand) !important;
+  color: #fff !important;
+}
+/* Filter name input */
+.filter-name-input,
+input[name="filter_name"],
+input[class*="filter-name"] {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin-top: 8px !important;
+  padding: 8px 12px !important;
+}
+/* Flex column layout for filter section */
+.filter-section .list-group-by {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+}
+.filter-section .group-by-field {
+  margin: 0 !important;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 991px) {
+  .layout-side-section { width: 100% !important; min-height: unset !important; }
+  .layout-main-section { padding: 12px !important; }
+}
+
+/* ============================================================
+   Sidebar shell — full-height, menempel pojok kiri-atas
+   (Figma 633:2154 "Sidebar (open)", 256 x 1024)
+
+   Cara kerja:
+   - .layout-side-section (kolom bootstrap) TETAP di alur halaman
+     sebagai penahan 256px -> konten tidak tertutup. Saat sidebar
+     di-collapse, custom14.js hanya menambah class (state "mini"),
+     bukan display:none, sehingga penahan menyempit ke 144px.
+   - .desk-sidebar (isi sidebar) dibuat fixed dari y=0 sampai bawah
+     viewport, jadi menutupi area navbar/page-head di kiri atas.
+   - navbar & page-head digeser via padding-left supaya isinya tidak
+     berada di bawah sidebar.
+   Cakupan: hanya halaman workspace (container #page-Workspaces) dan
+   hanya desktop >= 992px. Halaman list/form tidak berubah.
+   ============================================================ */
+@media (min-width: 992px) {
+  /* 1. penahan lebar 256px di dalam alur */
+  html body .layout-side-section:has(.desk-sidebar) {
+    flex: 0 0 256px !important;
+    width: 256px !important;
+    min-width: 256px !important;
+    max-width: 256px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+    background: #172C4F !important;
+  }
+
+  /* 2. sidebar sendiri: fixed, full-height, pojok kiri-atas */
+  html body .layout-side-section:has(.desk-sidebar) .desk-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 256px !important;
+    height: 100vh !important;
+    z-index: 1035 !important;          /* di atas navbar, di bawah modal */
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding: 8px 0 0 !important;
+    background: #172C4F !important;
+  }
+
+  /* 3. halaman full-width supaya penahan 256px pas di bawah sidebar.
+     Rule chrome (navbar / page-head) di-scope ke #page-Workspaces,
+     karena container workspace tetap ada di DOM (display:none) saat
+     pindah ke halaman list/form -- tanpa scope ini navbar ikut geser. */
+  #page-Workspaces .page-body {
+    max-width: none !important;
+    padding-left: 0 !important;
+  }
+
+  /* 4. isi navbar & page-head digeser ke kanan sidebar */
+  html body:has(#page-Workspaces:not([style*="display: none"])) .navbar {
+    padding-left: 256px !important;
+  }
+  #page-Workspaces .page-head {
+    padding-left: 280px !important;    /* 256 + 24px padding asli */
+  }
+  #page-Workspaces .page-head > .container {
+    max-width: none !important;
+    padding-left: 0 !important;
+  }
+
+  /* 5. logo pindah ke sidebar -> logo di navbar disembunyikan
+     (hanya saat halaman workspace yang aktif) */
+  html body:has(#page-Workspaces:not([style*="display: none"])) .navbar .navbar-home {
+    display: none !important;
+  }
+
+  /* 5b. tombol toggle sidebar di workspace memakai chevron, bukan
+     hamburger (Figma: chevron bulat). Ikonnya ditukar oleh
+     custom14.js antara "collapse" dan "expand" saat state mini. */
+  #page-Workspaces .page-head .sidebar-toggle-btn .sidebar-toggle-icon {
+    display: inline-flex !important;
+  }
+  #page-Workspaces .page-head .sidebar-toggle-btn .sidebar-toggle-placeholder {
+    display: none !important;
+  }
+
+  /* 6. logo di dalam sidebar.
+     Gambarnya sama dengan `.app-logo` di navbar
+     (frappe.boot.app_logo_url = hooks `app_logo_url` framework).
+     Kalau logo situs diganti lewat Navbar Settings, cukup ganti
+     nilai variabel di bawah ini. */
+  html body .layout-side-section:has(.desk-sidebar) {
+    --erpx-app-logo: url("/assets/frappe/images/frappe-framework-logo.svg");
+  }
+  html body .layout-side-section:has(.desk-sidebar) .desk-sidebar::before {
+    content: "";
+    display: block;
+    height: 44px;
+    margin: 24px 34px 88px;            /* plat 32..76, menu mulai ~164 */
+    background-color: #ffffff;
+    background-image: var(--erpx-app-logo);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 28px 28px;
+    border-radius: 6px;
+  }
+  html body .layout-side-section:has(.desk-sidebar) .desk-sidebar::after {
+    content: "Powered by ERPX";
+    position: absolute;
+    top: 84px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.55);
+    pointer-events: none;
+  }
+
+  /* 7. fallback: kalau .layout-side-section benar-benar display:none
+     (mis. sidebar di-collapse saat mobile lalu layar dilebarkan),
+     offset navbar & page-head dikembalikan. */
+  html body:has(#page-Workspaces .layout-side-section[style*="display: none"]) .navbar,
+  html body:has(#page-Workspaces .layout-side-section[style*="display: none"]) .page-head {
+    padding-left: 0 !important;
+  }
+}
+
+/* ============================================================
+   Sidebar — state "mini": ikon saja
+   (Figma node 4:11 "Sidebar (close)", rail 144 x 1024)
+
+   Dipicu oleh custom14.js yang menambah class `erpx-sidebar-mini`
+   di <body> saat tombol toggle sidebar diklik (desktop >= 992px).
+   Sidebar TIDAK disembunyikan, hanya menyempit jadi rail ikon:
+   - rail 144px, item jadi chip 44x46, ikon di tengah
+   - label, section title, tombol kontrol & child item disembunyikan
+   - label item tetap muncul sebagai tooltip native karena
+     <a class="item-anchor"> sudah punya atribut title dari Frappe
+   ============================================================ */
+@media (min-width: 992px) {
+  /* kolom penahan ikut menyempit */
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) {
+    flex: 0 0 144px !important;
+    width: 144px !important;
+    min-width: 144px !important;
+    max-width: 144px !important;
+  }
+
+  /* panel sidebar */
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .desk-sidebar {
+    width: 144px !important;
+  }
+
+  /* container item: buang margin -10px bawaan Frappe supaya chip pas tengah */
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .desk-sidebar .sidebar-item-container {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+  }
+
+  /* chrome bergeser mengikuti rail (hanya saat workspace aktif) */
+  html body.erpx-sidebar-mini:has(#page-Workspaces:not([style*="display: none"])) .navbar {
+    padding-left: 144px !important;
+  }
+  html body.erpx-sidebar-mini #page-Workspaces .page-head {
+    padding-left: 168px !important;    /* 144 + 24px padding asli */
+  }
+
+  /* logo: plat 188px -> chip 44x44 di tengah, caption dibuang */
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .desk-sidebar::before {
+    width: 44px;
+    margin-left: auto;
+    margin-right: auto;
+    background-size: 22px 22px;
+  }
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .desk-sidebar::after {
+    content: none;
+  }
+
+  /* label & elemen non-ikon disembunyikan */
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .sidebar-item-label,
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .standard-sidebar-label,
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .sidebar-item-control,
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .sidebar-child-item {
+    display: none !important;
+  }
+
+  /* item jadi chip ikon 44x46 (pitch 62 seperti Figma) */
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .desk-sidebar .desk-sidebar-item.standard-sidebar-item {
+    width: 44px !important;
+    height: 46px !important;
+    padding: 0 !important;
+    margin: 0 auto 16px !important;
+    justify-content: center !important;
+    background: transparent !important;
+    border-color: transparent !important;
+  }
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .desk-sidebar .desk-sidebar-item.standard-sidebar-item .item-anchor {
+    padding: 0 !important;
+    justify-content: center !important;
+    overflow: visible !important;
+  }
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .desk-sidebar .desk-sidebar-item .sidebar-item-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+  }
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .desk-sidebar .desk-sidebar-item .sidebar-item-icon svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .desk-sidebar .desk-sidebar-item.standard-sidebar-item:not(.selected):hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+  }
+  html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .desk-sidebar .desk-sidebar-item.standard-sidebar-item.selected {
+    background: #2a4d78 !important;
+  }
+
+  /* ikon toggle: diurus custom14.js (collapse <-> expand) */
+}
+
+/* ============================================================
+   Journal Entry — Validation Footer card (Figma 634:3372)
+   DOM dibuat oleh public/js/journal_entry_list.bundle.js
+   (doctype_js "Journal Entry"). Semua rule di-scope ke
+   .erpx-je-validation / .erpx-je-form (CSS ini global).
+   ============================================================ */
+.erpx-je-validation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 10px 0 18px;
+  padding: 14px 18px;
+  border: 1px solid #BBF7D0;
+  border-radius: 10px;
+  background: #F0FDF4;
+  color: #15803D;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.erpx-je-validation.is-unbalanced {
+  border-color: #FECACA;
+  background: #FEF2F2;
+  color: #B91C1C;
+}
+.erpx-je-validation.is-empty {
+  border-color: #E5E7EB;
+  background: #F8FAFC;
+  color: #6B7280;
+}
+
+.erpx-je-validation-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.erpx-je-validation-icon {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+}
+.erpx-je-validation-icon svg {
+  width: 24px;
+  height: 24px;
+}
+.erpx-je-validation-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.erpx-je-validation-totals {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex: 0 0 auto;
+}
+.erpx-je-validation-total {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 120px;
+}
+.erpx-je-validation-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #6B7280;
+}
+.erpx-je-validation-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #111827;
+}
+
+/* Field total bawaan disembunyikan: angkanya sudah di card */
+.erpx-je-form .frappe-control[data-fieldname="total_debit"],
+.erpx-je-form .frappe-control[data-fieldname="total_credit"] {
+  display: none !important;
+}
+/* Difference hanya relevan saat tidak balance */
+.erpx-je-form:not(.erpx-je-unbalanced) .frappe-control[data-fieldname="difference"] {
+  display: none !important;
+}
+
+@media (max-width: 767px) {
+  .erpx-je-validation {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .erpx-je-validation-totals {
+    width: 100%;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .erpx-je-validation-total {
+    align-items: flex-start;
+    min-width: 0;
+  }
+  .erpx-je-validation-text {
+    white-space: normal;
+  }
+}

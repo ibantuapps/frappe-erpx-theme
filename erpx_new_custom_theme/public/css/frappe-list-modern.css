@@ -1,0 +1,171 @@
+html body .frappe-list {
+  font-size: 16px !important;
+  color: #1F272E !important;
+}
+
+/* header baris judul */
+html body .frappe-list header.list-row-head.text-muted,
+html body .frappe-list header.list-row-head {
+  background: #EEF2FF !important;
+  border-radius: 12px 12px 0 0 !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  border-bottom: none !important;
+  padding: 20px 20px !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #0B1627 !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+  position: relative;
+  z-index: 2;
+}
+html body .frappe-list header.list-row-head.text-muted .list-row-col > span,
+html body .frappe-list header.list-row-head .list-row-col > span,
+html body .frappe-list header.list-row-head.text-muted span {
+  color: #0B1627 !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+/* container baris — kartu */
+html body .frappe-list .list-row-container {
+  margin: 0 !important;
+}
+html body .frappe-list .list-row {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(0,0,0,0.08) !important;
+  border-top: none !important;
+  border-radius: 0 !important;
+  padding: 20px 20px !important;
+  transition: background 0.15s ease, box-shadow 0.15s ease !important;
+}
+html body .frappe-list .list-row:first-of-type {
+  border-top: 1px solid rgba(0,0,0,0.08) !important;
+  border-radius: 0 0 0 0 !important;
+}
+html body .frappe-list .list-row:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1) !important;
+  background: #F8FAFC !important;
+}
+html body .frappe-list .list-row-container:has(+ .no-result) .list-row:last-of-type {
+  border-radius: 0 0 12px 12px !important;
+}
+
+/* hapus separator default */
+html body .frappe-list .list-row-border {
+  border: none !important;
+  display: none !important;
+}
+
+/* teks subjek (nama akun) */
+html body .frappe-list .list-row .list-subject a.ellipsis {
+  color: #1F272E !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+}
+html body .frappe-list .list-row .list-subject a.ellipsis:hover {
+  color: #172C4F !important;
+}
+
+/* kolom teks lain */
+html body .frappe-list .list-row .list-row-col > span,
+html body .frappe-list .list-row .list-row-col a.filterable {
+  color: #4B5563 !important;
+  font-size: 15px !important;
+}
+html body .frappe-list .list-row .list-row-col a.filterable:hover {
+  color: #172C4F !important;
+}
+
+/* indicator pill */
+html body .frappe-list .list-row .indicator-pill {
+  border-radius: 20px !important;
+  padding: 6px 14px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+/* checkbox konsisten */
+html body .frappe-list .list-row .list-row-checkbox,
+html body .frappe-list .list-row-head .list-check-all {
+  border-radius: 6px !important;
+  accent-color: #172C4F !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* tag column - modern tag badge (size ready when visible) */
+html body .frappe-list .list-row-col.tag-col.hide span,
+html body .frappe-list .list-row-col.tag-col.hidden-xs span {
+  color: #172C4F !important;
+  font-size: 16px !important;
+}
+
+/* paging area - Figma 634:2768 */
+html body .frappe-list .list-paging-area {
+  margin-top: 0 !important;
+  padding: 0 !important;
+}
+
+/* level layout */
+html body .frappe-list .list-paging-area.level {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 20px !important;
+  border-top: 1px solid rgba(0,0,0,0.1) !important;
+  background: #FFFFFF !important;
+  border-radius: 0 0 12px 12px !important;
+}
+html body .frappe-list .list-paging-area .level-left {
+  display: flex !important;
+  gap: 8px !important;
+  align-items: center !important;
+}
+
+/* hide pagination Load More (level-right di paging area) */
+html body .frappe-list .list-paging-area > .level-right {
+  display: none !important;
+}
+
+/* hide activity column (5M, love, comments) in rows and header */
+html body .frappe-list .list-row .level-right,
+html body .frappe-list header.list-row-head.text-muted .level-right {
+  display: none !important;
+}
+
+/* items per page buttons - segmented control */
+html body .frappe-list .list-paging-area .btn-group {
+  display: inline-flex !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+}
+html body .frappe-list .list-paging-area .btn-group .btn.btn-paging {
+  border-radius: 0 !important;
+  border: none !important;
+  border-right: 1px solid rgba(0,0,0,0.1) !important;
+  background: #FFFFFF !important;
+  color: #464554 !important;
+  font-size: 16px !important;
+  font-family: 'Poppins', sans-serif !important;
+  padding: 10px 16px !important;
+  transition: all 0.15s ease !important;
+}
+html body .frappe-list .list-paging-area .btn-group .btn.btn-paging:last-child {
+  border-right: none !important;
+}
+html body .frappe-list .list-paging-area .btn-group .btn.btn-paging.btn-info {
+  background: #172C4F !important;
+  color: #FFFFFF !important;
+}
+html body .frappe-list .list-paging-area .btn-group .btn.btn-paging:hover:not(.btn-info) {
+  background: #F8FAFC !important;
+}
+
+/* Remove old Load More button styles */
+html body .frappe-list .list-paging-area .btn-more {
+  display: none !important;
+}
+

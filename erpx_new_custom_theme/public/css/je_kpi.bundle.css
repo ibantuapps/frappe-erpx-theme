@@ -1,0 +1,77 @@
+/* ============================================================
+   Journal Entry List View KPI Layout (light theme, English)
+   ============================================================ */
+
+.je-kpi-container {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 16px !important;
+  margin: 16px 20px 8px 20px !important;
+}
+
+@media (max-width: 1200px) {
+  .je-kpi-container {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .je-kpi-container {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.je-kpi-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+  box-sizing: border-box !important;
+}
+
+.je-kpi-card__label {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #64748b !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  margin-bottom: 6px !important;
+}
+
+.je-kpi-card__val {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin-bottom: 6px !important;
+}
+
+.je-kpi-card__val--green { color: #059669 !important; font-family: monospace !important; }
+.je-kpi-card__val--blue  { color: #3b82f6 !important; }
+.je-kpi-card__val--gray  { color: #64748b !important; }
+
+.je-kpi-card__sub {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+.je-kpi-card__sub--green { color: #10b981 !important; }
+.je-kpi-card__sub--blue  { color: #3b82f6 !important; }
+.je-kpi-card__sub--gray  { color: #64748b !important; }
+
+.je-kpi-card__badge {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.je-kpi-card__badge--green { background: #ecfdf5 !important; }
+.je-kpi-card__badge--blue  { background: #eff6ff !important; }
+.je-kpi-card__badge--gray  { background: #f9fafb !important; }
