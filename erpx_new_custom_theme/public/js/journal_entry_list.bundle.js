@@ -43,46 +43,40 @@ function renderJournalKPI(listview) {
 
       '<div class="je-kpi-card">',
         '<div class="je-kpi-card__body">',
-          '<div class="je-kpi-card__label">' + __("Total Debit") + '</div>',
-          '<div class="je-kpi-card__val" id="je-total-debit">$0</div>',
-          '<div class="je-kpi-card__sub je-kpi-card__sub--blue" id="je-total-debit-sub">• 0 ' + __("Entries") + '</div>',
+          '<div class="je-kpi-card__label">' + __("Total Debit Posted") + '</div>',
+          '<div class="je-kpi-card__val" id="je-total-debit">—</div>',
+          '<div class="je-kpi-card__sub je-kpi-card__sub--green" id="je-total-debit-sub">• 0 ' + __("Entries Verified") + '</div>',
         '</div>',
-        '<div class="je-kpi-card__badge je-kpi-card__badge--blue">',
-          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
-        '</div>',
+        '<div class="je-kpi-card__badge je-kpi-card__badge--blue js-badge-text">Dr</div>',
       '</div>',
 
       '<div class="je-kpi-card">',
         '<div class="je-kpi-card__body">',
-          '<div class="je-kpi-card__label">' + __("Total Credit") + '</div>',
-          '<div class="je-kpi-card__val" id="je-total-credit">$0</div>',
-          '<div class="je-kpi-card__sub je-kpi-card__sub--green" id="je-total-credit-sub">• 0 ' + __("Entries") + '</div>',
+          '<div class="je-kpi-card__label">' + __("Total Credit Posted") + '</div>',
+          '<div class="je-kpi-card__val" id="je-total-credit">—</div>',
+          '<div class="je-kpi-card__sub je-kpi-card__sub--green" id="je-total-credit-sub">• 0 ' + __("Entries Verified") + '</div>',
+        '</div>',
+        '<div class="je-kpi-card__badge je-kpi-card__badge--indigo js-badge-text">Cr</div>',
+      '</div>',
+
+      '<div class="je-kpi-card">',
+        '<div class="je-kpi-card__body">',
+          '<div class="je-kpi-card__label">' + __("Balance Status") + '</div>',
+          '<div class="je-kpi-card__val" id="je-status">' + __("Balanced") + '</div>',
+          '<div class="je-kpi-card__sub je-kpi-card__sub--green" id="je-status-sub">✓ ' + __("Double-Entry Sharia Check OK") + '</div>',
         '</div>',
         '<div class="je-kpi-card__badge je-kpi-card__badge--green">',
-          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>',
         '</div>',
       '</div>',
 
       '<div class="je-kpi-card">',
         '<div class="je-kpi-card__body">',
-          '<div class="je-kpi-card__label">' + __("Net (Debit - Credit)") + '</div>',
-          '<div class="je-kpi-card__val" id="je-net">$0</div>',
-          '<div class="je-kpi-card__sub je-kpi-card__sub--gray">• ' + __("Month-end difference") + '</div>',
+          '<div class="je-kpi-card__label">' + __("Mustahik Distribution (PSAK 109)") + '</div>',
+          '<div class="je-kpi-card__val" id="je-mustahik">—</div>',
+          '<div class="je-kpi-card__sub je-kpi-card__sub--amber" id="je-mustahik-sub">' + __("No distribution yet") + '</div>',
         '</div>',
-        '<div class="je-kpi-card__badge je-kpi-card__badge--gray">',
-          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
-        '</div>',
-      '</div>',
-
-      '<div class="je-kpi-card">',
-        '<div class="je-kpi-card__body">',
-          '<div class="je-kpi-card__label">' + __("Journal Entries") + '</div>',
-          '<div class="je-kpi-card__val" id="je-count">0</div>',
-          '<div class="je-kpi-card__sub je-kpi-card__sub--blue" id="je-count-sub">• ' + __("Entries this month") + '</div>',
-        '</div>',
-        '<div class="je-kpi-card__badge je-kpi-card__badge--blue">',
-          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 4v16m8-8H4"/></svg>',
-        '</div>',
+        '<div class="je-kpi-card__badge je-kpi-card__badge--amber js-badge-text">%</div>',
       '</div>',
 
     '</div>'
@@ -117,20 +111,31 @@ function loadJournalKPIData(listview) {
         var $debitSub = $scope.find('[id="je-total-debit-sub"]');
         var $credit = $scope.find('[id="je-total-credit"]');
         var $creditSub = $scope.find('[id="je-total-credit-sub"]');
-        var $net = $scope.find('[id="je-net"]');
-        var $count = $scope.find('[id="je-count"]');
-        var $countSub = $scope.find('[id="je-count-sub"]');
+        var $status = $scope.find('[id="je-status"]');
+        var $statusSub = $scope.find('[id="je-status-sub"]');
+        var $mustahik = $scope.find('[id="je-mustahik"]');
+        var $mustahikSub = $scope.find('[id="je-mustahik-sub"]');
 
         if ($debit.length) $debit.text(d.total_debit_fmt || '');
-        if ($debitSub.length) $debitSub.text('• ' + (d.count || 0) + ' ' + __("Entries"));
+        if ($debitSub.length) $debitSub.text('• ' + (d.count || 0) + ' ' + __("Entries Verified"));
 
         if ($credit.length) $credit.text(d.total_credit_fmt || '');
-        if ($creditSub.length) $creditSub.text('• ' + (d.count || 0) + ' ' + __("Entries"));
+        if ($creditSub.length) $creditSub.text('• ' + (d.count || 0) + ' ' + __("Entries Verified"));
 
-        if ($net.length) $net.text(d.net_fmt || '');
+        if ($status.length) {
+          $status.text((d.status_text || '') + (d.balanced ? ' (' + __("Difference") + ': ' + (d.difference_fmt || '') + ')' : ''));
+        }
+        if ($statusSub.length) {
+          $statusSub.text((d.balanced ? '✓ ' : '• ') + __("Double-Entry Sharia Check OK"));
+          $statusSub.toggleClass('je-kpi-card__sub--green', !!d.balanced);
+          $statusSub.toggleClass('je-kpi-card__sub--red', !d.balanced);
+        }
 
-        if ($count.length) $count.text(d.count || 0);
-        if ($countSub.length) $countSub.text('• ' + (d.count || 0) + ' ' + __("Entries this month"));
+        if ($mustahik.length) $mustahik.text(d.mustahik_fmt || '');
+        if ($mustahikSub.length) {
+          var asnaf = (d.asnaf || []).join(', ');
+          $mustahikSub.text(asnaf ? (__("Asnaf") + ': ' + asnaf) : __('No distribution yet'));
+        }
       }
     },
   });

@@ -1489,3 +1489,97 @@ input[class*="filter-name"] {
     white-space: normal;
   }
 }
+
+
+/* ============================================================
+   Smooth boot (workspace + sidebar)
+   - reservasi lebar sidebar sebelum sidebar benar-benar render
+   - fade-in konten setelah render pertama
+   ============================================================ */
+html body #page-Workspaces:not([style*="display: none"]) .layout-side-section {
+  flex: 0 0 256px;
+  width: 256px;
+  min-width: 256px;
+  background: #172C4F;
+}
+
+#page-Workspaces .page-body,
+#page-Workspaces .desk-sidebar {
+  transition: opacity 220ms ease;
+}
+
+html.erpx-booting #page-Workspaces .page-body,
+html.erpx-booting #page-Workspaces .desk-sidebar {
+  opacity: 0;
+}
+
+html.erpx-booting #page-Workspaces .layout-side-section,
+html.erpx-booting #page-Workspaces .desk-sidebar {
+  transition: none !important;
+}
+
+/* Catatan: skeleton min-height untuk widget kosong dihapus karena
+   membuat jarak vertikal workspace membengkak. Fade-in tetap. */
+
+
+/* ---------- Card Links: ikon per link ---------- */
+.widget.links-widget-box .link-item {
+  gap: 10px !important;
+}
+
+.widget.links-widget-box .link-item .erpx-link-icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #11213b;
+}
+
+.widget.links-widget-box .link-item .erpx-link-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.widget.links-widget-box .link-item .erpx-link-icon img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  display: block;
+}
+
+
+/* ---------- Icon picker: input custom ---------- */
+.popover.icon-picker-popover .erpx-icon-custom {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.popover.icon-picker-popover .erpx-icon-custom label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 4px;
+}
+
+.popover.icon-picker-popover .erpx-icon-custom input {
+  width: 100%;
+  font-size: 12px;
+}
+
+.popover.icon-picker-popover .erpx-icon-custom__hint {
+  margin-top: 4px;
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+
+.erpx-icon-custom-input {
+  margin-top: 6px !important;
+  height: 28px !important;
+  font-size: 11px !important;
+  padding: 2px 8px !important;
+}

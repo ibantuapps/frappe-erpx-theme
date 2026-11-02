@@ -2,6 +2,88 @@
    Custom JS — erpx_new_custom_theme
    ============================================================ */
 
+/* ------------------------------------------------------------
+   Boot fade + tunggu API KPI.
+   Workspace ditahan (opacity 0) sampai semua panggilan API KPI
+   selesai, lalu seluruh kartu (link biasa + custom block) fade-in
+   BERSAMAAN. Ada batas aman 2,5 detik.
+   ------------------------------------------------------------ */
+(function () {
+  const html = document.documentElement;
+  html.classList.add("erpx-booting");
+
+  let released = false;
+  let pending = 0;
+  let saw_call = false;
+
+  function release() {
+    if (released) return;
+    released = true;
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        html.classList.remove("erpx-booting");
+      });
+    });
+  }
+
+  // Lacak pemanggilan API KPI (card custom) supaya render bareng.
+  function hook_calls() {
+    if (!window.frappe || typeof frappe.call !== "function") return false;
+    if (frappe.call.__erpx_boot_wrapped) return true;
+
+    const original = frappe.call.bind(frappe);
+    frappe.call = function (opts, args) {
+      // frappe.call mendukung dua bentuk: call({method, args}) dan call(method, args)
+      const method = typeof opts === "string" ? opts : (opts && opts.method) || "";
+      const tracked = /erpx_new_custom_theme\.api\.(kpi|je_kpi|fund_report|finance_report)/.test(method);
+      if (tracked) {
+        pending += 1;
+        saw_call = true;
+      }
+      const result = original(opts, args);
+      if (tracked) {
+        const done = function () {
+          pending = Math.max(0, pending - 1);
+          if (pending === 0) setTimeout(release, 60);
+        };
+        if (result && typeof result.always === "function") result.always(done);
+        else if (result && typeof result.then === "function") result.then(done, done);
+        else setTimeout(done, 500);
+      }
+      return result;
+    };
+    frappe.call.__erpx_boot_wrapped = true;
+    return true;
+  }
+
+  const hook_timer = setInterval(function () {
+    if (hook_calls()) clearInterval(hook_timer);
+  }, 40);
+
+  function after_first_render() {
+    setTimeout(function () {
+      // kalau halaman ini tidak memanggil API KPI sama sekali, jangan tahan lama
+      if (!saw_call && pending === 0) release();
+    }, 500);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", after_first_render);
+  } else {
+    after_first_render();
+  }
+
+  // transisi antar halaman (SPA): lepas lebih cepat
+  document.addEventListener("page-change", function () {
+    setTimeout(function () {
+      if (pending === 0) release();
+    }, 150);
+  });
+
+  // jaring aman
+  setTimeout(release, 2500);
+})();
+
 // ERPx: sidebar workspace di-collapse -> rail ikon saja
 // (Figma node 4:11 "Sidebar (close)": rail 144px, ikon saja)
 //
@@ -414,3 +496,150 @@
 
 // Export untuk compatibility jika ada yang butuh
 window.erpx_custom = window.erpx_custom || {};
+
+
+/* ------------------------------------------------------------
+   Workspace "Card Links": tampilkan ikon per link.
+   Frappe menyimpan field `icon` di Workspace Link tetapi widget
+   `links-widget-box` tidak merendernya. Patch ini menambahkan
+   ikon di depan label (mendukung nama ikon Frappe atau SVG).
+   ------------------------------------------------------------ */
+(function () {
+  function apply_icons(widget) {
+    if (!widget || !widget.links || !widget.body) return;
+    var $items = widget.body.find(".link-item");
+    widget.links.forEach(function (item, index) {
+      var icon = item && item.icon ? String(item.icon).trim() : "";
+      if (!icon) return;
+      var $item = $items.eq(index);
+      if (!$item.length || $item.find(".erpx-link-icon").length) return;
+      var html;
+      if (icon.indexOf("<svg") === 0) {
+        html = icon; // SVG mentah (Flaticon, Lucide, dll.)
+      } else if (/^(https?:)?\/\/|^\/(files|private\/files|assets)\//.test(icon)) {
+        html = '<img src="' + icon + '" alt="">'; // file yang di-upload
+      } else {
+        html = frappe.utils.icon(icon, "sm"); // nama ikon Frappe (es-line-*)
+      }
+      $item.prepend('<span class="erpx-link-icon">' + html + "</span>");
+    });
+  }
+
+  function patch_links_widget() {
+    if (!window.frappe || !frappe.widget || !frappe.widget.widget_factory) return false;
+    var factory = frappe.widget.widget_factory;
+    var LinksWidget = factory.links;
+    if (!LinksWidget || !LinksWidget.prototype) return false;
+    if (LinksWidget.prototype.__erpx_icon_patched) return true;
+
+    var original = LinksWidget.prototype.set_body;
+    LinksWidget.prototype.set_body = function () {
+      original.apply(this, arguments);
+      try {
+        apply_icons(this);
+      } catch (e) {
+        /* jangan ganggu render workspace kalau gagal */
+      }
+    };
+    LinksWidget.prototype.__erpx_icon_patched = true;
+    return true;
+  }
+
+  if (!patch_links_widget()) {
+    var tries = 0;
+    var timer = setInterval(function () {
+      tries += 1;
+      if (patch_links_widget() || tries > 100) clearInterval(timer);
+    }, 60);
+  }
+})();
+
+
+/* ------------------------------------------------------------
+   Icon picker: izinkan ikon custom (URL file / SVG mentah).
+   Picker bawaan hanya menampilkan ikon Frappe; input tambahan
+   ini muncul di dalam popover dan menyimpan nilai bebas.
+   ------------------------------------------------------------ */
+(function () {
+  function install_custom_icon_input() {
+    if (!window.frappe || !frappe.ui || !frappe.ui.form || !frappe.ui.form.ControlIcon) {
+      return false;
+    }
+    var ControlIcon = frappe.ui.form.ControlIcon;
+    if (ControlIcon.prototype.__erpx_custom_icon) return true;
+
+    var original_make_input = ControlIcon.prototype.make_input;
+    ControlIcon.prototype.make_input = function () {
+      original_make_input.apply(this, arguments);
+      var self = this;
+
+      // Input langsung di bawah kontrol ikon (selalu terlihat, termasuk
+      // di dalam grid Card Links pada dialog Card workspace).
+      var $direct = $(
+        '<input type="text" class="form-control erpx-icon-custom-input" ' +
+        'placeholder="URL ikon / SVG">'
+      );
+      $direct.val(self.get_value ? self.get_value() || "" : "");
+      function commit_icon(value) {
+        value = (value || "").trim();
+        if (!value) return;
+        // Di dalam grid (Card Links), nilai harus masuk ke row doc,
+        // bukan hanya ke control, agar ikut tersimpan saat dialog Save.
+        if (self.doc && typeof self.doc.set === "function") {
+          self.doc.set("icon", value);
+        }
+        self.set_value(value);
+      }
+
+      $direct.on("change blur", function () {
+        commit_icon($(this).val());
+      });
+      this.$wrapper.append($direct);
+
+      this.$wrapper.on("show.bs.popover.erpx-icon", function () {
+        setTimeout(function () {
+          var $tip = $(".popover.icon-picker-popover:visible").last();
+          var $content = $tip.find(".popover-content, .popover-body");
+          if (!$content.length || $content.find(".erpx-icon-custom").length) return;
+
+          var $box = $(
+            '<div class="erpx-icon-custom">' +
+              '<label>Icon URL / SVG</label>' +
+              '<input type="text" class="form-control" ' +
+              'placeholder="/files/icon.svg atau <svg …>">' +
+              '<div class="erpx-icon-custom__hint">Tempel URL file yang sudah di-upload, atau kode SVG.</div>' +
+            "</div>"
+          );
+
+          $box.find("input").on("change blur", function () {
+            var value = ($(this).val() || "").trim();
+            if (!value) return;
+            if (self.doc && typeof self.doc.set === "function") {
+              self.doc.set("icon", value);
+            }
+            self.set_value(value);
+          });
+          $box.find("input").on("keydown", function (e) {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              $(this).trigger("change");
+            }
+          });
+
+          $content.append($box);
+        }, 40);
+      });
+    };
+
+    ControlIcon.prototype.__erpx_custom_icon = true;
+    return true;
+  }
+
+  if (!install_custom_icon_input()) {
+    var tries = 0;
+    var timer = setInterval(function () {
+      tries += 1;
+      if (install_custom_icon_input() || tries > 100) clearInterval(timer);
+    }, 80);
+  }
+})();

@@ -1,0 +1,454 @@
+{
+  "PBX2V2": {
+    "funds": {
+      "zakat": {
+        "title": {
+          "id": "Laporan Perubahan Dana Zakat",
+          "en": "Zakat Fund Statement"
+        },
+        "subtitle": {
+          "id": "Penyajian mutasi dan saldo dana zakat per periode",
+          "en": "Zakat fund movements and balances for the period"
+        },
+        "columns": "terikat",
+        "income": [
+          {
+            "code": "41",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "expense": [
+          {
+            "code": "51",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "equity": {
+          "opening": [
+            "3101"
+          ],
+          "prior": []
+        },
+        "opening_mode": "pl_unclosed"
+      },
+      "infak": {
+        "title": {
+          "id": "Laporan Perubahan Dana Infak & Sedekah",
+          "en": "Infak & Sedekah Fund Statement"
+        },
+        "subtitle": {
+          "id": "Mutasi dan saldo dana infak/sedekah terikat dan tidak terikat",
+          "en": "Tied and untied infak/sedekah fund movements and balances"
+        },
+        "columns": "terikat",
+        "income": [
+          {
+            "code": "4201",
+            "bucket": "terikat"
+          },
+          {
+            "code": "4202",
+            "bucket": "tidak_terikat"
+          },
+          {
+            "code": "4203",
+            "bucket": "tidak_terikat"
+          },
+          {
+            "code": "4204",
+            "bucket": "tidak_terikat"
+          },
+          {
+            "code": "4205",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "expense": [
+          {
+            "code": "5201",
+            "bucket": "tidak_terikat"
+          },
+          {
+            "code": "5202",
+            "bucket": "terikat"
+          },
+          {
+            "code": "5203",
+            "bucket": "tidak_terikat"
+          },
+          {
+            "code": "5204",
+            "bucket": "tidak_terikat"
+          },
+          {
+            "code": "5205",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "equity": {
+          "opening": [
+            "3201"
+          ],
+          "prior": []
+        },
+        "opening_mode": "pl_unclosed"
+      },
+      "amil": {
+        "title": {
+          "id": "Laporan Perubahan Dana Amil",
+          "en": "Amil Fund Statement"
+        },
+        "subtitle": {
+          "id": "Penerimaan dan penggunaan hak amil pengelola ziswaf",
+          "en": "Amil share receipts and usage"
+        },
+        "columns": "single",
+        "income": [
+          {
+            "code": "43",
+            "bucket": "total"
+          }
+        ],
+        "expense": [
+          {
+            "code": "53",
+            "bucket": "total"
+          }
+        ],
+        "equity": {
+          "opening": [
+            "3301"
+          ],
+          "prior": []
+        },
+        "opening_mode": "pl_unclosed"
+      }
+    }
+  },
+  "Satu Foundation New": {
+    "funds": {
+      "zakat": {
+        "title": {
+          "id": "Laporan Perubahan Dana Zakat",
+          "en": "Zakat Fund Statement"
+        },
+        "subtitle": {
+          "id": "Penyajian mutasi dan saldo dana zakat per periode",
+          "en": "Zakat fund movements and balances for the period"
+        },
+        "columns": "terikat",
+        "income": [
+          {
+            "code": "41",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "expense": [
+          {
+            "code": "51",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "equity": {
+          "opening": [
+            "3101"
+          ],
+          "prior": []
+        },
+        "opening_mode": "pl_unclosed"
+      },
+      "infak": {
+        "title": {
+          "id": "Laporan Perubahan Dana Infak & Sedekah",
+          "en": "Infak & Sedekah Fund Statement"
+        },
+        "subtitle": {
+          "id": "Mutasi dan saldo dana infak/sedekah terikat dan tidak terikat",
+          "en": "Tied and untied infak/sedekah fund movements and balances"
+        },
+        "columns": "terikat",
+        "income": [
+          {
+            "code": "4201",
+            "bucket": "terikat"
+          },
+          {
+            "code": "4202",
+            "bucket": "tidak_terikat"
+          },
+          {
+            "code": "4203",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "expense": [
+          {
+            "code": "5201",
+            "bucket": "tidak_terikat"
+          },
+          {
+            "code": "5202",
+            "bucket": "terikat"
+          },
+          {
+            "code": "5203",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "equity": {
+          "opening": [
+            "3201"
+          ],
+          "prior": []
+        },
+        "opening_mode": "pl_unclosed"
+      },
+      "amil": {
+        "title": {
+          "id": "Laporan Perubahan Dana Amil",
+          "en": "Amil Fund Statement"
+        },
+        "subtitle": {
+          "id": "Penerimaan dan penggunaan hak amil pengelola ziswaf",
+          "en": "Amil share receipts and usage"
+        },
+        "columns": "single",
+        "income": [
+          {
+            "code": "43",
+            "bucket": "total"
+          }
+        ],
+        "expense": [
+          {
+            "code": "53",
+            "bucket": "total"
+          }
+        ],
+        "equity": {
+          "opening": [
+            "3301"
+          ],
+          "prior": []
+        },
+        "opening_mode": "pl_unclosed"
+      }
+    }
+  },
+  "barbar berkabar hambarrr": {
+    "funds": {
+      "zakat": {
+        "title": {
+          "id": "Laporan Perubahan Dana Zakat",
+          "en": "Zakat Fund Statement"
+        },
+        "subtitle": {
+          "id": "Penyajian mutasi dan saldo dana zakat per periode",
+          "en": "Zakat fund movements and balances for the period"
+        },
+        "columns": "terikat",
+        "income": [
+          {
+            "code": "411000",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "expense": [
+          {
+            "code": "511000",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "equity": {
+          "opening": [
+            "311001"
+          ],
+          "prior": [
+            "311005"
+          ]
+        },
+        "opening_mode": "equity_only"
+      },
+      "infak": {
+        "title": {
+          "id": "Laporan Perubahan Dana Infak & Sedekah",
+          "en": "Infak & Sedekah Fund Statement"
+        },
+        "subtitle": {
+          "id": "Mutasi dan saldo dana infak/sedekah terikat dan tidak terikat",
+          "en": "Tied and untied infak/sedekah fund movements and balances"
+        },
+        "columns": "terikat",
+        "income": [
+          {
+            "code": "412000",
+            "bucket": "terikat"
+          },
+          {
+            "code": "413000",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "expense": [
+          {
+            "code": "512000",
+            "bucket": "terikat"
+          },
+          {
+            "code": "513000",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "equity": {
+          "opening": [
+            "311002"
+          ],
+          "prior": [
+            "311006"
+          ]
+        },
+        "opening_mode": "equity_only"
+      },
+      "amil": {
+        "title": {
+          "id": "Laporan Perubahan Dana Amil",
+          "en": "Amil Fund Statement"
+        },
+        "subtitle": {
+          "id": "Penerimaan dan penggunaan hak amil pengelola ziswaf",
+          "en": "Amil share receipts and usage"
+        },
+        "columns": "single",
+        "income": [
+          {
+            "code": "416000",
+            "bucket": "total"
+          }
+        ],
+        "expense": [
+          {
+            "code": "516000",
+            "bucket": "total"
+          }
+        ],
+        "equity": {
+          "opening": [
+            "311004"
+          ],
+          "prior": [
+            "311008"
+          ]
+        },
+        "opening_mode": "equity_only"
+      }
+    }
+  },
+  "barbar berkabar hambarr": {
+    "funds": {
+      "zakat": {
+        "title": {
+          "id": "Laporan Perubahan Dana Zakat",
+          "en": "Zakat Fund Statement"
+        },
+        "subtitle": {
+          "id": "Penyajian mutasi dan saldo dana zakat per periode",
+          "en": "Zakat fund movements and balances for the period"
+        },
+        "columns": "terikat",
+        "income": [
+          {
+            "code": "411000",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "expense": [
+          {
+            "code": "511000",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "equity": {
+          "opening": [
+            "311001"
+          ],
+          "prior": [
+            "311005"
+          ]
+        },
+        "opening_mode": "equity_only"
+      },
+      "infak": {
+        "title": {
+          "id": "Laporan Perubahan Dana Infak & Sedekah",
+          "en": "Infak & Sedekah Fund Statement"
+        },
+        "subtitle": {
+          "id": "Mutasi dan saldo dana infak/sedekah terikat dan tidak terikat",
+          "en": "Tied and untied infak/sedekah fund movements and balances"
+        },
+        "columns": "terikat",
+        "income": [
+          {
+            "code": "412000",
+            "bucket": "terikat"
+          },
+          {
+            "code": "413000",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "expense": [
+          {
+            "code": "512000",
+            "bucket": "terikat"
+          },
+          {
+            "code": "513000",
+            "bucket": "tidak_terikat"
+          }
+        ],
+        "equity": {
+          "opening": [
+            "311002"
+          ],
+          "prior": [
+            "311006"
+          ]
+        },
+        "opening_mode": "equity_only"
+      },
+      "amil": {
+        "title": {
+          "id": "Laporan Perubahan Dana Amil",
+          "en": "Amil Fund Statement"
+        },
+        "subtitle": {
+          "id": "Penerimaan dan penggunaan hak amil pengelola ziswaf",
+          "en": "Amil share receipts and usage"
+        },
+        "columns": "single",
+        "income": [
+          {
+            "code": "416000",
+            "bucket": "total"
+          }
+        ],
+        "expense": [
+          {
+            "code": "516000",
+            "bucket": "total"
+          }
+        ],
+        "equity": {
+          "opening": [
+            "311004"
+          ],
+          "prior": [
+            "311008"
+          ]
+        },
+        "opening_mode": "equity_only"
+      }
+    }
+  }
+}

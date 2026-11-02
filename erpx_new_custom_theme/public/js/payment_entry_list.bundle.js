@@ -10,7 +10,6 @@ var _pe_old_onload = frappe.listview_settings['Payment Entry'].onload;
 frappe.listview_settings['Payment Entry'].onload = function (listview) {
   if (_pe_old_onload) _pe_old_onload(listview);
   renderPaymentKPI(listview);
-  renderPilarFilter(listview);
 };
 
 var _pe_old_refresh = frappe.listview_settings['Payment Entry'].refresh;
@@ -21,8 +20,6 @@ frappe.listview_settings['Payment Entry'].refresh = function (listview) {
   } else {
     renderPaymentKPI(listview);
   }
-  renderPilarFilter(listview);
-  loadPilarCounts(listview);
 };
 
 function getPaymentListContainer(listview) {
@@ -68,9 +65,9 @@ function renderPaymentKPI(listview) {
 
       '<div class="pe-kpi-card">',
         '<div class="pe-kpi-card__body">',
-          '<div class="pe-kpi-card__label">' + __("Net Balance (Receive - Pay)") + '</div>',
+          '<div class="pe-kpi-card__label">' + __("Xendit Escrow Settlement") + '</div>',
           '<div class="pe-kpi-card__val" id="pe-kpi-escrow"></div>',
-          '<div class="pe-kpi-card__sub pe-kpi-card__sub--blue">• ' + __("Cash difference this month") + '</div>',
+          '<div class="pe-kpi-card__sub pe-kpi-card__sub--green">• ' + __("Auto-Reconciled Today") + '</div>',
         '</div>',
         '<div class="pe-kpi-card__badge pe-kpi-card__badge--blue">',
           '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
@@ -79,9 +76,9 @@ function renderPaymentKPI(listview) {
 
       '<div class="pe-kpi-card">',
         '<div class="pe-kpi-card__body">',
-          '<div class="pe-kpi-card__label">' + __("Audit Evidence Completeness") + '</div>',
-          '<div class="pe-kpi-card__val pe-kpi-card__val--green" id="pe-kpi-evidence">&mdash;</div>',
-          '<div class="pe-kpi-card__sub pe-kpi-card__sub--gray" id="pe-kpi-evidence-sub">&bull; ' + __("No submitted entries this month") + '</div>',
+          '<div class="pe-kpi-card__label">' + __("Sharia Compliance & Audit") + '</div>',
+          '<div class="pe-kpi-card__val" id="pe-kpi-evidence">&mdash;</div>',
+          '<div class="pe-kpi-card__sub pe-kpi-card__sub--green" id="pe-kpi-evidence-sub"></div>',
         '</div>',
         '<div class="pe-kpi-card__badge pe-kpi-card__badge--amber">',
           '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg>',
@@ -137,14 +134,7 @@ function loadPaymentKPIData(listview) {
           $ev.text(
             d.evidence_pct === null || d.evidence_pct === undefined
               ? '\u2014'
-              : format_number(d.evidence_pct, null, 0) + '%'
-          );
-        }
-        if ($evSub.length) {
-          $evSub.text(
-            d.evidence_total
-              ? '\u2022 ' + d.evidence_documented + '/' + d.evidence_total + ' ' + __("entries documented")
-              : '\u2022 ' + __("No submitted entries this month")
+              : format_number(d.evidence_pct, null, 0) + '% ' + __("Sesuai Akad")
           );
         }
       }
@@ -206,8 +196,6 @@ function getActiveCompany(listview) {
         renderPaymentKPI(list);
       }
       loadPaymentKPIData(list);
-      renderPilarFilter(list);
-      loadPilarCounts(list);
       return;
     }
     setTimeout(tick, 300);

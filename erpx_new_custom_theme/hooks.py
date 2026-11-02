@@ -5,6 +5,15 @@ app_description = "ERPX New Custom Theme"
 app_email = "tm@ibantu.co"
 app_license = "mit"
 
+import os
+
+
+def _static_asset_url(url_path, file_path):
+    try:
+        return f"{url_path}?v={int(os.path.getmtime(file_path))}"
+    except OSError:
+        return url_path
+
 # Apps
 # ------------------
 
@@ -39,6 +48,10 @@ app_include_css = [
 
 app_include_js = [
     "/assets/erpx_new_custom_theme/js/custom14.js",
+    _static_asset_url(
+        "/assets/erpx_new_custom_theme/js/fund_report.js",
+        os.path.join(os.path.dirname(__file__), "public", "js", "fund_report.js"),
+    ),
     "/assets/erpx_new_custom_theme/js/coa_card_view.bundle.js",
     "/assets/erpx_new_custom_theme/js/kpi_card.bundle.js",
     "/assets/erpx_new_custom_theme/js/kpi_card_ziswaf.bundle.js",
@@ -68,16 +81,6 @@ boot_session = "erpx_new_custom_theme.boot.boot_session"
 # max-age. The file mtime is appended as a cache-buster: after editing the CSS
 # and running `bench clear-cache`, the URL changes and browsers fetch the new
 # version without a hard reload. No version number is written by hand.
-import os
-
-
-def _static_asset_url(url_path, file_path):
-    try:
-        return f"{url_path}?v={int(os.path.getmtime(file_path))}"
-    except OSError:
-        return url_path
-
-
 web_include_css = _static_asset_url(
     "/assets/erpx_new_custom_theme/css/login_erpx.css",
     os.path.join(os.path.dirname(__file__), "public", "css", "login_erpx.css"),

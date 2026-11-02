@@ -103,9 +103,60 @@ def get_journal_entry_summary(company=None):
     tot_credit = float(je.get("total_credit") or 0)
     cnt = int(je.get("cnt") or 0)
 
+    asnaf_keywords = [
+        ("fakir", "Fakir"),
+        ("miskin", "Miskin"),
+        ("riqab", "Riqab"),
+        ("gharim", "Gharim"),
+        ("muallaf", "Muallaf"),
+        ("fisabil", "Fisabilillah"),
+        ("ibnu sabil", "Ibnu Sabil"),
+        ("mustahik", "Mustahik"),
+        ("bantuan pendidikan", "Pendidikan"),
+        ("bantuan kesehatan", "Kesehatan"),
+        ("bantuan kemanusiaan", "Kemanusiaan"),
+        ("bantuan dakwah", "Dakwah"),
+    ]
+
+    mustahik_rows = frappe.db.sql(
+        """
+        SELECT jea.account, SUM(jea.debit - jea.credit) AS amount
+        FROM `tabJournal Entry Account` jea
+        JOIN `tabJournal Entry` je ON je.name = jea.parent
+        WHERE je.company = %(company)s
+          AND je.docstatus = 1
+          AND je.posting_date BETWEEN %(start)s AND %(end)s
+          AND jea.account NOT LIKE '%%Amil%%'
+        GROUP BY jea.account
+    """,
+        {"company": company, "start": month_start, "end": today},
+        as_dict=True,
+    )
+
+    mustahik_total = 0.0
+    asnaf = []
+    for row in mustahik_rows:
+        name = (row.account or "").lower()
+        matched = [label for key, label in asnaf_keywords if key in name]
+        if not matched:
+            continue
+        mustahik_total += float(row.amount or 0)
+        for label in matched:
+            if label not in asnaf:
+                asnaf.append(label)
+
+    difference = tot_debit - tot_credit
+    balanced = abs(difference) < 0.01
+
     return {
         "total_debit_fmt": format_money(tot_debit, currency),
         "total_credit_fmt": format_money(tot_credit, currency),
         "count": cnt,
-        "net_fmt": format_money(tot_debit - tot_credit, currency),
+        "net_fmt": format_money(difference, currency),
+        "balanced": balanced,
+        "status_text": _("Balanced") if balanced else _("Not Balanced"),
+        "difference_fmt": format_money(abs(difference), currency),
+        "mustahik_fmt": format_money(mustahik_total, currency),
+        "asnaf": asnaf,
+        "currency": currency,
     }

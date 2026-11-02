@@ -381,6 +381,91 @@ def get_kpi_ziswaf(company=None):
 
 
 @frappe.whitelist()
+def get_kpi_amil(company=None):
+    """KPI Penerimaan Dana Amil (bulan berjalan)."""
+    company = _resolve_company(company)
+
+    if not company:
+        return {"error": _("Company not set")}
+
+    currency, symbol = get_company_currency_symbol(company)
+
+    icon_html = '''
+        <svg class="kpi-card__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a8 8 0 1 0 8 8"/>
+            <path d="M12 10v6"/>
+            <path d="M9 13h6"/>
+        </svg>
+    '''
+
+    income_accounts = frappe.get_all(
+        "Account",
+        filters={"company": company, "root_type": "Income", "is_group": 0},
+        fields=["name", "account_name"],
+    )
+    accounts = [
+        a for a in income_accounts
+        if "amil" in (a.account_name or "").lower() or a.name.startswith("43")
+    ]
+
+    if not accounts:
+        return {
+            "labelLines": [_("Amil Fund Receipts"), _("(This Month)")],
+            "value": format_money(0, currency),
+            "currency": currency,
+            "trendValue": "0%",
+            "trendLabel": _("vs last month"),
+            "trendUp": True,
+            "iconHtml": icon_html,
+        }
+
+    account_names = [a.name for a in accounts]
+    today = getdate(nowdate())
+    month_start = today.replace(day=1)
+    last_month_end = month_start - relativedelta(days=1)
+    last_month_start = last_month_end.replace(day=1)
+
+    current_total = frappe.db.sql("""
+        SELECT SUM(credit - debit) as balance
+        FROM `tabGL Entry`
+        WHERE account IN %(accounts)s
+          AND company = %(company)s
+          AND is_cancelled = 0
+          AND posting_date BETWEEN %(start)s AND %(end)s
+    """, {"accounts": account_names, "company": company, "start": month_start, "end": today}, as_dict=True)
+
+    last_month_total = frappe.db.sql("""
+        SELECT SUM(credit - debit) as balance
+        FROM `tabGL Entry`
+        WHERE account IN %(accounts)s
+          AND company = %(company)s
+          AND is_cancelled = 0
+          AND posting_date BETWEEN %(start)s AND %(end)s
+    """, {"accounts": account_names, "company": company, "start": last_month_start, "end": last_month_end}, as_dict=True)
+
+    current = float(current_total[0].balance or 0) if current_total else 0
+    last_month = float(last_month_total[0].balance or 0) if last_month_total else 0
+
+    if last_month != 0:
+        pct = ((current - last_month) / abs(last_month)) * 100
+        trend_value = f"{'+' if pct >= 0 else ''}{pct:.1f}%"
+        trend_up = pct >= 0
+    else:
+        trend_value = "0%"
+        trend_up = True
+
+    return {
+        "labelLines": [_("Amil Fund Receipts"), _("(This Month)")],
+        "value": format_money(current, currency),
+        "currency": currency,
+        "trendValue": trend_value,
+        "trendLabel": _("vs last month"),
+        "trendUp": trend_up,
+        "iconHtml": icon_html,
+    }
+
+
+@frappe.whitelist()
 def get_kpi_mustahik(company=None):
     """
     Ambil data KPI Penyaluran Mustahik bulan ini.
