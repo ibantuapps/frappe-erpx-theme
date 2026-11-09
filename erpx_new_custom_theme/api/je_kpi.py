@@ -40,8 +40,11 @@ def _resolve_company(company=None):
     if company:
         if isinstance(company, str):
             company = company.strip()
+        # Nilai parsial saat user mengetik ulang di field Company jangan
+        # sampai memunculkan error "Company X not found". Kalau belum ada,
+        # abaikan dan jatuh ke default company user.
         if not frappe.db.exists("Company", company):
-            frappe.throw(_("Company {0} not found").format(company))
+            return _resolve_company(None)
         if not frappe.has_permission("Company", doc=company):
             frappe.throw(_("Not permitted to access Company {0}").format(company))
         allowed = _get_allowed_companies()
@@ -78,7 +81,16 @@ def get_journal_entry_summary(company=None):
 
     currency, symbol = get_company_currency_symbol(company)
     today = frappe.utils.getdate(frappe.utils.nowdate())
-    month_start = today.replace(day=1)
+
+    # Periode KPI = tahun fiskal berjalan (year to date), bukan hanya bulan
+    # berjalan, supaya card tidak selalu 0 di awal bulan.
+    fiscal = frappe.db.get_value(
+        "Fiscal Year",
+        {"year_start_date": ["<=", today], "year_end_date": [">=", today]},
+        ["year_start_date", "year_end_date"],
+        as_dict=True,
+    )
+    period_start = fiscal.year_start_date if fiscal else today.replace(month=1, day=1)
 
     # Fetch Journal Entry aggregates
     je = (
@@ -93,7 +105,7 @@ def get_journal_entry_summary(company=None):
           AND docstatus = 1
           AND posting_date BETWEEN %(start)s AND %(end)s
     """,
-            {"company": company, "start": month_start, "end": today},
+            {"company": company, "start": period_start, "end": today},
             as_dict=True,
         )[0]
         or {}
@@ -129,7 +141,7 @@ def get_journal_entry_summary(company=None):
           AND jea.account NOT LIKE '%%Amil%%'
         GROUP BY jea.account
     """,
-        {"company": company, "start": month_start, "end": today},
+        {"company": company, "start": period_start, "end": today},
         as_dict=True,
     )
 

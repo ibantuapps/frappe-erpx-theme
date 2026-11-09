@@ -70,14 +70,6 @@ function renderJournalKPI(listview) {
         '</div>',
       '</div>',
 
-      '<div class="je-kpi-card">',
-        '<div class="je-kpi-card__body">',
-          '<div class="je-kpi-card__label">' + __("Mustahik Distribution (PSAK 109)") + '</div>',
-          '<div class="je-kpi-card__val" id="je-mustahik">—</div>',
-          '<div class="je-kpi-card__sub je-kpi-card__sub--amber" id="je-mustahik-sub">' + __("No distribution yet") + '</div>',
-        '</div>',
-        '<div class="je-kpi-card__badge je-kpi-card__badge--amber js-badge-text">%</div>',
-      '</div>',
 
     '</div>'
   ].join('');
@@ -113,8 +105,6 @@ function loadJournalKPIData(listview) {
         var $creditSub = $scope.find('[id="je-total-credit-sub"]');
         var $status = $scope.find('[id="je-status"]');
         var $statusSub = $scope.find('[id="je-status-sub"]');
-        var $mustahik = $scope.find('[id="je-mustahik"]');
-        var $mustahikSub = $scope.find('[id="je-mustahik-sub"]');
 
         if ($debit.length) $debit.text(d.total_debit_fmt || '');
         if ($debitSub.length) $debitSub.text('• ' + (d.count || 0) + ' ' + __("Entries Verified"));
@@ -129,12 +119,6 @@ function loadJournalKPIData(listview) {
           $statusSub.text((d.balanced ? '✓ ' : '• ') + __("Double-Entry Sharia Check OK"));
           $statusSub.toggleClass('je-kpi-card__sub--green', !!d.balanced);
           $statusSub.toggleClass('je-kpi-card__sub--red', !d.balanced);
-        }
-
-        if ($mustahik.length) $mustahik.text(d.mustahik_fmt || '');
-        if ($mustahikSub.length) {
-          var asnaf = (d.asnaf || []).join(', ');
-          $mustahikSub.text(asnaf ? (__("Asnaf") + ': ' + asnaf) : __('No distribution yet'));
         }
       }
     },
@@ -175,29 +159,71 @@ function getActiveCompany(listview) {
   return company;
 }
 
-/* Fallback timing: kalau onload ke-fire telat / list udah render duluan */
+/* ------------------------------------------------------------------
+   Fallback: Client Script site lain (mis. "filter company journal entry")
+   menimpa frappe.listview_settings['Journal Entry'] sehingga onload/
+   refresh milik app tidak dipanggil. Hook ke prototype ListView +
+   polling memastikan card KPI tetap terpasang dan ikut filter Company.
+   ------------------------------------------------------------------ */
 (function pollJeKpi() {
-  var tries = 0;
-  function tick() {
-    tries++;
-    if (tries > 50) return;
+  var last_sig = null;
 
-    var route = (frappe.get_route && frappe.get_route()) || [];
-    var onJeList = route[0] === 'List' && route[1] === 'Journal Entry';
-    if (!onJeList) { setTimeout(tick, 300); return; }
+  function current_list() {
+    var list = window.cur_list
+      || frappe.cur_list
+      || (frappe.views && frappe.views.ListView && frappe.views.ListView.current_list);
+    return (list && list.doctype === 'Journal Entry' && list.$page) ? list : null;
+  }
 
-    var list = (frappe.views && frappe.views.ListView && frappe.views.ListView.current_list)
-      || frappe.cur_list;
-
-    if (list && list.doctype === 'Journal Entry' && list.$page) {
-      if (list.$page.find('.je-kpi-container').length) {
-        loadJournalKPIData(list);
-      } else {
-        renderJournalKPI(list);
-      }
+  function ensure(list) {
+    if (!list || !list.$page) return;
+    if (!list.$page.find('.je-kpi-container').length) {
+      renderJournalKPI(list);
       return;
     }
-    setTimeout(tick, 300);
+    var sig = '';
+    try {
+      sig = JSON.stringify((list.get_filters_for_args && list.get_filters_for_args()) || []);
+    } catch (e) {
+      sig = '';
+    }
+    if (sig && sig !== last_sig) {
+      last_sig = sig;
+      loadJournalKPIData(list);
+    }
   }
-  $(document).ready(function () { setTimeout(tick, 500); });
+
+  function patch_listview() {
+    var LV = window.frappe && frappe.views && frappe.views.ListView;
+    if (!LV || !LV.prototype || typeof LV.prototype.refresh !== 'function') return false;
+    if (LV.prototype.__erpx_je_hooked) return true;
+
+    var original_refresh = LV.prototype.refresh;
+    LV.prototype.refresh = function () {
+      var result = original_refresh.apply(this, arguments);
+      var self = this;
+      if (self && self.doctype === 'Journal Entry' && self.$page) {
+        setTimeout(function () { ensure(self); }, 250);
+      }
+      return result;
+    };
+    LV.prototype.__erpx_je_hooked = true;
+    return true;
+  }
+
+  var hook_timer = setInterval(function () {
+    if (patch_listview()) clearInterval(hook_timer);
+  }, 100);
+
+  function tick() {
+    var route = (frappe.get_route && frappe.get_route()) || [];
+    if (route[0] === 'List' && route[1] === 'Journal Entry') {
+      ensure(current_list());
+    }
+    setTimeout(tick, 700);
+  }
+
+  if (window.jQuery) {
+    $(document).ready(function () { setTimeout(tick, 600); });
+  }
 })();

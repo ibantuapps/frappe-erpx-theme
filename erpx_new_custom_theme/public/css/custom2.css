@@ -567,6 +567,30 @@ html body div.layout-side-section:has(.filter-section) .sidebar-section + .sideb
   letter-spacing: 0.07em !important;
   color: var(--brand) !important;
 }
+/* Header kolom: satu baris (tidak wrap) + tabel bisa scroll ke samping.
+   Lebar kolom dihitung oleh custom14.js mengikuti teks header. */
+.frappe-list .result {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+}
+.frappe-list .list-row-head,
+.frappe-list .list-row-container {
+  min-width: max-content;
+}
+.frappe-list .list-row-head .list-row-col,
+.frappe-list .list-row .list-row-col {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+}
+.frappe-list .list-row-head {
+  height: auto !important;
+  min-height: 38px !important;
+}
+.frappe-list .list-row-head .list-row-col {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
 .list-row {
   border-bottom: 1px solid var(--border) !important;
   transition: background .12s !important;
@@ -831,7 +855,28 @@ select.form-control {
   border: 1px solid var(--border) !important;
   border-radius: var(--r-lg) !important;
   box-shadow: 0 20px 60px rgba(11,22,39,0.18) !important;
-  overflow: hidden !important;
+  /* JANGAN overflow:hidden — dropdown/awesomplete di dalam modal
+     akan terpotong dan terlihat "tertutup" oleh modal. */
+  overflow: visible !important;
+}
+.modal-header {
+  border-top-left-radius: var(--r-lg) !important;
+  border-top-right-radius: var(--r-lg) !important;
+}
+.modal-footer {
+  border-bottom-left-radius: var(--r-lg) !important;
+  border-bottom-right-radius: var(--r-lg) !important;
+}
+
+/* Dropdown/pilihan di dalam modal harus di atas konten modal. */
+.modal .awesomplete > ul,
+.modal .dropdown-menu,
+.modal .select-dropdown {
+  z-index: 2000 !important;
+}
+.modal .awesomplete > ul {
+  max-height: 260px !important;
+  overflow-y: auto !important;
 }
 .modal-header {
   background: #fff !important;
@@ -1242,25 +1287,23 @@ input[class*="filter-name"] {
      (frappe.boot.app_logo_url = hooks `app_logo_url` framework).
      Kalau logo situs diganti lewat Navbar Settings, cukup ganti
      nilai variabel di bawah ini. */
-  html body .layout-side-section:has(.desk-sidebar) {
-    --erpx-app-logo: url("/assets/frappe/images/frappe-framework-logo.svg");
-  }
   html body .layout-side-section:has(.desk-sidebar) .desk-sidebar::before {
     content: "";
     display: block;
-    height: 44px;
-    margin: 24px 34px 88px;            /* plat 32..76, menu mulai ~164 */
+    height: 58px;
+    margin: 24px 26px 62px;            /* plat 58px, menu mulai ~144 */
     background-color: #ffffff;
-    background-image: var(--erpx-app-logo);
+    background-image: var(--erpx-app-logo, url("/assets/frappe/images/frappe-framework-logo.svg"));
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 28px 28px;
-    border-radius: 6px;
+    background-size: 42px 42px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22), 0 1px 0 rgba(255, 255, 255, 0.15) inset;
   }
   html body .layout-side-section:has(.desk-sidebar) .desk-sidebar::after {
     content: "Powered by ERPX";
     position: absolute;
-    top: 84px;
+    top: 92px;
     left: 0;
     right: 0;
     text-align: center;
@@ -1323,10 +1366,12 @@ input[class*="filter-name"] {
 
   /* logo: plat 188px -> chip 44x44 di tengah, caption dibuang */
   html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .desk-sidebar::before {
-    width: 44px;
+    width: 48px;
+    height: 48px;
     margin-left: auto;
     margin-right: auto;
-    background-size: 22px 22px;
+    background-size: 30px 30px;
+    border-radius: 10px;
   }
   html body.erpx-sidebar-mini div.layout-side-section:has(.desk-sidebar) .desk-sidebar::after {
     content: none;

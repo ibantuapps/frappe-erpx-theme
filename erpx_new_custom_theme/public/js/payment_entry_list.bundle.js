@@ -74,16 +74,7 @@ function renderPaymentKPI(listview) {
         '</div>',
       '</div>',
 
-      '<div class="pe-kpi-card">',
-        '<div class="pe-kpi-card__body">',
-          '<div class="pe-kpi-card__label">' + __("Sharia Compliance & Audit") + '</div>',
-          '<div class="pe-kpi-card__val" id="pe-kpi-evidence">&mdash;</div>',
-          '<div class="pe-kpi-card__sub pe-kpi-card__sub--green" id="pe-kpi-evidence-sub"></div>',
-        '</div>',
-        '<div class="pe-kpi-card__badge pe-kpi-card__badge--amber">',
-          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg>',
-        '</div>',
-      '</div>',
+
     '</div>'
   ].join('');
 
@@ -116,8 +107,6 @@ function loadPaymentKPIData(listview) {
         var $d = $scope.find('[id="pe-kpi-disburse"]');
         var $dSub = $scope.find('[id="pe-kpi-disburse-sub"]');
         var $e = $scope.find('[id="pe-kpi-escrow"]');
-        var $ev = $scope.find('[id="pe-kpi-evidence"]');
-        var $evSub = $scope.find('[id="pe-kpi-evidence-sub"]');
 
         if ($r.length) $r.text(d.total_receive_fmt || '');
         if ($rSub.length) $rSub.text('• ' + (d.count_receive || 0) + ' ' + __("Verified incoming entries"));
@@ -127,16 +116,6 @@ function loadPaymentKPIData(listview) {
 
         if ($e.length) $e.text(d.total_escrow_fmt || '');
 
-        // Audit evidence card - value always comes from data (never a fixed %).
-        // Pakai format_number() (teks polos): frappe.format() mengembalikan HTML
-        // <div style='text-align: right'> yang bocor sebagai teks di kartu.
-        if ($ev.length) {
-          $ev.text(
-            d.evidence_pct === null || d.evidence_pct === undefined
-              ? '\u2014'
-              : format_number(d.evidence_pct, null, 0) + '% ' + __("Sesuai Akad")
-          );
-        }
       }
     }
   });
@@ -408,3 +387,84 @@ function loadPilarCounts(listview) {
     }
   });
 }
+
+/* ------------------------------------------------------------------
+   Fallback: Client Script lain di site (mis. "Merapikan Payment Entry")
+   menimpa frappe.listview_settings['Payment Entry'] dengan objek baru,
+   sehingga onload/refresh milik app tidak dipanggil. Polling ini
+   memastikan card KPI tetap terpasang & ter-refresh.
+   ------------------------------------------------------------------ */
+(function pollPaymentKPI() {
+  var last_sig = null;
+
+  function current_list() {
+    var list = window.cur_list
+      || frappe.cur_list
+      || (frappe.views && frappe.views.ListView && frappe.views.ListView.current_list);
+    return (list && list.doctype === 'Payment Entry' && list.$page) ? list : null;
+  }
+
+  // Hook langsung ke prototype ListView: tetap jalan walaupun
+  // frappe.listview_settings['Payment Entry'] ditimpa Client Script.
+  function patch_listview() {
+    var LV = window.frappe && frappe.views && frappe.views.ListView;
+    if (!LV || !LV.prototype || typeof LV.prototype.refresh !== "function") return false;
+    if (LV.prototype.__erpx_pe_hooked) return true;
+
+    var original_refresh = LV.prototype.refresh;
+    LV.prototype.refresh = function () {
+      var result = original_refresh.apply(this, arguments);
+      var self = this;
+      if (self && self.doctype === "Payment Entry" && self.$page) {
+        setTimeout(function () {
+          if (!self.$page.find(".pe-kpi-container").length) {
+            renderPaymentKPI(self);
+          } else {
+            loadPaymentKPIData(self);
+          }
+        }, 250);
+      }
+      return result;
+    };
+    LV.prototype.__erpx_pe_hooked = true;
+    return true;
+  }
+
+  (function wait_for_listview() {
+    var tries = 0;
+    var timer = setInterval(function () {
+      tries += 1;
+      if (patch_listview() || tries > 100) clearInterval(timer);
+    }, 100);
+  })();
+
+  function tick() {
+    var route = (frappe.get_route && frappe.get_route()) || [];
+    if (route[0] === 'List' && route[1] === 'Payment Entry') {
+      var list = current_list();
+      if (list) {
+        if (!list.$page.find('.pe-kpi-container').length) {
+          renderPaymentKPI(list);
+        } else {
+          var sig = '';
+          try {
+            sig = JSON.stringify((list.get_filters_for_args && list.get_filters_for_args()) || []);
+          } catch (e) {
+            sig = '';
+          }
+          if (sig && sig !== last_sig) {
+            last_sig = sig;
+            loadPaymentKPIData(list);
+          }
+        }
+      }
+    }
+    setTimeout(tick, 700);
+  }
+
+  if (window.jQuery) {
+    $(document).ready(function () {
+      setTimeout(tick, 600);
+    });
+  }
+})();

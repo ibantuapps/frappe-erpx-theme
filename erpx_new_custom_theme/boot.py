@@ -43,6 +43,16 @@ def boot_session(bootinfo):
 	are logged and the report falls back to the defaults above.
 	"""
 	bootinfo.erpx_report_config = {}
+
+	# Logo sidebar: ikuti Website Settings -> Brand Image (app_logo),
+	# fallback ke Navbar Settings / hook app_logo_url.
+	try:
+		from frappe.core.doctype.navbar_settings.navbar_settings import get_app_logo
+
+		bootinfo.erpx_app_logo = get_app_logo()
+	except Exception:
+		bootinfo.erpx_app_logo = None
+
 	if frappe.session.user == "Guest":
 		return
 

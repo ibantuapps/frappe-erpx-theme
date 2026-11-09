@@ -106,8 +106,22 @@ INVESTING_HINTS = (
 )
 
 
-def _labels():
+def _labels(company=None):
+	"""Label baris laporan mengikuti negara entitas (bukan bahasa UI).
+
+	COA LAZ di Indonesia memakai nama akun Indonesia; jadi laporan
+	keuangannya juga disajikan dalam Bahasa Indonesia walaupun UI
+	desk berbahasa Inggris. Company Malaysia -> "ms" (fallback en).
+	"""
 	lang = _lang()
+	if company:
+		country = (frappe.db.get_value("Company", company, "country") or "").strip().lower()
+		if country == "indonesia":
+			lang = "id"
+		elif country == "malaysia":
+			lang = "id" if "id" in LABELS else "en"
+		else:
+			lang = "en"
 	return dict(LABELS[lang])
 
 
@@ -226,7 +240,7 @@ def run(filters):
 	if not company:
 		frappe.throw(_("Please select a Company"))
 
-	labels = _labels()
+	labels = _labels(company)
 	currency = frappe.db.get_value("Company", company, "default_currency") or "IDR"
 	period_type = (filters.get("period_type") or "Bulanan").strip().lower()
 	compare = period_type.startswith("fiscal")

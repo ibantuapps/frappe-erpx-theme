@@ -84,6 +84,34 @@
   setTimeout(release, 2500);
 })();
 
+/* ------------------------------------------------------------
+   Logo sidebar mengikuti Website Settings -> Brand Image.
+   Nilai dikirim lewat boot (erpx_app_logo); kalau kosong, CSS
+   memakai logo default Frappe.
+   ------------------------------------------------------------ */
+(function () {
+  function apply_logo() {
+    if (!window.frappe || !frappe.boot) return false;
+    var logo = frappe.boot.erpx_app_logo;
+    if (!logo) logo = "/assets/frappe/images/frappe-framework-logo.svg";
+    document.documentElement.style.setProperty(
+      "--erpx-app-logo",
+      'url("' + String(logo).replace(/"/g, '\\"') + '")'
+    );
+    return true;
+  }
+
+  if (!apply_logo()) {
+    document.addEventListener("DOMContentLoaded", apply_logo);
+    if (window.jQuery) jQuery(document).on("app_ready", apply_logo);
+    var tries = 0;
+    var timer = setInterval(function () {
+      tries += 1;
+      if (apply_logo() || tries > 100) clearInterval(timer);
+    }, 80);
+  }
+})();
+
 // ERPx: sidebar workspace di-collapse -> rail ikon saja
 // (Figma node 4:11 "Sidebar (close)": rail 144px, ikon saja)
 //
@@ -641,5 +669,101 @@ window.erpx_custom = window.erpx_custom || {};
       tries += 1;
       if (install_custom_icon_input() || tries > 100) clearInterval(timer);
     }, 80);
+  }
+})();
+
+
+/* ------------------------------------------------------------
+   List view: lebar kolom mengikuti teks header (satu baris),
+   dan tabel bisa di-scroll ke samping bila melebihi layar.
+   ------------------------------------------------------------ */
+(function () {
+  var measure_canvas = null;
+
+  function measure_text(text, font) {
+    if (!measure_canvas) measure_canvas = document.createElement("canvas");
+    var ctx = measure_canvas.getContext("2d");
+    ctx.font = font;
+    return ctx.measureText(text).width;
+  }
+
+  function apply_column_widths($list) {
+    var $head = $list.find(".list-row-head").first();
+    if (!$head.length) return;
+    var $cols = $head.find(".list-row-col");
+    if (!$cols.length) return;
+
+    var style = window.getComputedStyle($cols[0]);
+    var font = style.font || ((style.fontSize || "11px") + " " + (style.fontFamily || "sans-serif"));
+    var upper = (style.textTransform || "").toLowerCase() === "uppercase";
+
+    var widths = [];
+    $cols.each(function () {
+      var raw = $(this).text().trim();
+      var text = upper ? raw.toUpperCase() : raw;
+      widths.push(Math.max(110, Math.ceil(measure_text(text, font)) + 44));
+    });
+
+    // Kalau total lebar header lebih kecil dari area list, lebarkan
+    // proporsional supaya tabel tetap memenuhi satu layar (tidak kecil
+    // dan tidak menyisakan ruang kosong di kanan).
+    var $result = $list.find(".result").first();
+    var available = $result.length ? $result[0].clientWidth : 0;
+    var total_base = widths.reduce(function (a, b) { return a + b; }, 0);
+    if (available && total_base + 96 < available) {
+      var target = available - 96;
+      var scale = target / total_base;
+      widths = widths.map(function (w) { return Math.max(96, Math.floor(w * scale)); });
+      var diff = target - widths.reduce(function (a, b) { return a + b; }, 0);
+      if (diff) widths[widths.length - 1] += diff;
+    }
+
+    function size_cell(el, width) {
+      if (!width) return;
+      el.style.flex = "0 0 " + width + "px";
+      el.style.minWidth = width + "px";
+      el.style.maxWidth = width + "px";
+    }
+
+    $cols.each(function (i) { size_cell(this, widths[i]); });
+    $list.find(".list-row").each(function () {
+      $(this).find(".list-row-col").each(function (i) {
+        size_cell(this, widths[i]);
+      });
+    });
+
+    var total = widths.reduce(function (a, b) { return a + b; }, 0) + 96;
+    $head.css("min-width", total + "px");
+    $list.find(".list-row-container").css("min-width", total + "px");
+  }
+
+  function run() {
+    if (!window.frappe || !frappe.get_route) return;
+    var route = frappe.get_route() || [];
+    if (route[0] !== "List") return;
+    var $list = $(".frappe-list").first();
+    if ($list.length) apply_column_widths($list);
+  }
+
+  var timer = null;
+  function schedule() {
+    clearTimeout(timer);
+    timer = setTimeout(run, 180);
+  }
+
+  if (window.jQuery) {
+    $(document).on("page-change", schedule);
+    $(window).on("resize", schedule);
+    $(document).ready(function () {
+      setTimeout(schedule, 500);
+      setTimeout(schedule, 1200);
+    });
+  }
+
+  if (window.MutationObserver) {
+    var observer = new MutationObserver(schedule);
+    document.addEventListener("DOMContentLoaded", function () {
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
   }
 })();

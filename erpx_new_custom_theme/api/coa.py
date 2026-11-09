@@ -32,8 +32,11 @@ def _resolve_company(company=None):
     if company:
         if isinstance(company, str):
             company = company.strip()
+        # Nilai parsial saat user mengetik ulang di field Company jangan
+        # sampai memunculkan error "Company X not found". Kalau belum ada,
+        # abaikan dan jatuh ke default company user.
         if not frappe.db.exists("Company", company):
-            frappe.throw(_("Company {0} not found").format(company))
+            return _resolve_company(None)
         if not frappe.has_permission("Company", doc=company):
             frappe.throw(_("Not permitted to access Company {0}").format(company))
         allowed = _get_allowed_companies()
