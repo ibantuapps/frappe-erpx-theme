@@ -73,66 +73,51 @@ def get_coa_tree(company=None):
 
     if not company:
         frappe.throw(_("No company found. Please set a default company."))
-    
-    # Get all accounts for the company
-    accounts = frappe.get_all(
-        "Account",
-        filters={
-            "company": company,
-            "is_group": 0  # Only leaf accounts for now, groups handled via parent_account
-        },
-        fields=[
-            "name",
-            "account_name",
-            "account_number",
-            "account_type",
-            "root_type",
-            "parent_account",
-            "disabled",
-            "is_group"
-        ],
-        order_by="lft"
-    )
-    
-    # Get balances for all accounts
-    account_names = [acc.name for acc in accounts]
-    balances = get_account_balances(account_names, company)
-    
-    # Merge balances
-    for acc in accounts:
-        acc.balance = balances.get(acc.name, 0)
-    
-    # Also include group accounts for hierarchy
-    group_accounts = frappe.get_all(
-        "Account",
-        filters={"company": company, "is_group": 1},
-        fields=[
-            "name",
-            "account_name",
-            "account_number",
-            "account_type",
-            "root_type",
-            "parent_account",
-            "disabled",
-            "is_group"
-        ],
-        order_by="lft"
-    )
-    
-    # Group accounts have 0 balance (sum of children)
-    for acc in group_accounts:
-        acc.balance = 0
-    
-    all_accounts = accounts + group_accounts
+
+    result_key = f"erpx:coa_result:{company}"
+    cached_result = frappe.cache.get_value(result_key)
+    if cached_result is not None:
+        return cached_result
+
+    # Struktur akun di-cache sebentar (jarang berubah); saldo tetap
+    # dihitung fresh dari GL setiap request.
+    cache_key = f"erpx:coa_accounts:{company}"
+    all_accounts = frappe.cache.get_value(cache_key)
+    if all_accounts is None:
+        all_accounts = frappe.get_all(
+            "Account",
+            filters={"company": company},
+            fields=[
+                "name",
+                "account_name",
+                "account_number",
+                "account_type",
+                "root_type",
+                "parent_account",
+                "disabled",
+                "is_group",
+            ],
+            order_by="lft",
+        )
+        frappe.cache.set_value(cache_key, all_accounts, expires_in_sec=300)
+
+    # Saldo hanya untuk akun leaf (grup = 0, dihitung dari anaknya di UI).
+    leaf_names = [a.get("name") for a in all_accounts if not a.get("is_group")]
+    balances = get_account_balances(leaf_names, company)
+
+    for acc in all_accounts:
+        acc["balance"] = balances.get(acc.get("name"), 0) if not acc.get("is_group") else 0
 
     currency = get_company_currency(company)
 
-    return {
+    result = {
         "accounts": all_accounts,
         "company": company,
         "currency": currency,
         "symbol": get_currency_symbol(currency)
     }
+    frappe.cache.set_value(result_key, result, expires_in_sec=30)
+    return result
 
 
 def get_account_balances(account_names, company):

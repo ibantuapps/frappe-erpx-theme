@@ -57,10 +57,31 @@ def boot_session(bootinfo):
 		return
 
 	try:
-		companies = frappe.get_list(
-			"Company", fields=["name"], limit_page_length=0, order_by="name asc"
+		# Peta caps di-cache global (bukan per user): nilainya sama untuk
+		# semua user dan jarang berubah.
+		caps_map = frappe.cache.get_value("erpx:amil_caps_map")
+		if caps_map is None:
+			meta = frappe.get_meta("Company")
+			fields = [f for _k, f in AMIL_CAP_FIELDS if meta.has_field(f)]
+			caps_map = {}
+			for c in frappe.get_all(
+				"Company", fields=["name"] + fields, limit_page_length=0, order_by="name asc"
+			):
+				caps = {"zakat": DEFAULT_AMIL_CAP_ZAKAT, "non_zakat": DEFAULT_AMIL_CAP_NON_ZAKAT}
+				for key, fieldname in AMIL_CAP_FIELDS:
+					value = c.get(fieldname) if fieldname in fields else None
+					if value not in (None, ""):
+						caps[key] = float(value)
+				caps_map[c.name] = caps
+			frappe.cache.set_value("erpx:amil_caps_map", caps_map, expires_in_sec=600)
+
+		company_names = frappe.get_list(
+			"Company", pluck="name", limit_page_length=0, order_by="name asc"
 		)
-		bootinfo.erpx_report_config = {c.name: get_amil_caps(c.name) for c in companies}
+		default_caps = {"zakat": DEFAULT_AMIL_CAP_ZAKAT, "non_zakat": DEFAULT_AMIL_CAP_NON_ZAKAT}
+		bootinfo.erpx_report_config = {
+			name: caps_map.get(name, default_caps) for name in company_names
+		}
 	except Exception:
 		frappe.log_error(
 			title="ERPX report config could not be loaded",

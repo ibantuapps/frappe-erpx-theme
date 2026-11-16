@@ -3,6 +3,8 @@
 # File: erpx_new_custom_theme/api/kpi.py
 # ============================================================
 
+import functools
+
 import frappe
 from frappe import _
 from dateutil.relativedelta import relativedelta
@@ -333,9 +335,22 @@ def get_kpi_ziswaf(company=None):
     last_month = float(last_month_total[0].balance or 0) if last_month_total else 0
 
     breakdown_raw = {"zakat": 0.0, "infak": 0.0, "wakaf": 0.0}
-    
+
+    # Satu query GROUP BY account untuk seluruh breakdown (sebelumnya
+    # satu query per akun -> N+1 dan lambat saat akun ziswaf banyak).
+    grouped = frappe.db.sql("""
+        SELECT account, SUM(credit - debit) AS balance
+        FROM `tabGL Entry`
+        WHERE account IN %(accounts)s
+          AND company = %(company)s
+          AND is_cancelled = 0
+          AND posting_date BETWEEN %(start)s AND %(end)s
+        GROUP BY account
+    """, {'accounts': account_names, 'company': company, 'start': month_start, 'end': today}, as_dict=True)
+    balance_by_account = {row.account: float(row.balance or 0) for row in grouped}
+
     for a in accounts:
-        acc_name = a.account_name.lower()
+        acc_name = (a.account_name or '').lower()
         target_cat = None
         if 'zakat' in acc_name:
             target_cat = 'zakat'
@@ -345,17 +360,7 @@ def get_kpi_ziswaf(company=None):
             target_cat = 'wakaf'
 
         if target_cat:
-            cat_total = frappe.db.sql("""
-                SELECT SUM(credit - debit) as balance
-                FROM `tabGL Entry`
-                WHERE account = %(account)s
-                  AND company = %(company)s
-                  AND is_cancelled = 0
-                  AND posting_date BETWEEN %(start)s AND %(end)s
-            """, {'account': a.name, 'company': company, 'start': month_start, 'end': today}, as_dict=True)
-            
-            bal = float(cat_total[0].balance or 0) if cat_total else 0
-            breakdown_raw[target_cat] += bal
+            breakdown_raw[target_cat] += balance_by_account.get(a.name, 0)
 
     total_breakdown = sum(breakdown_raw.values())
     breakdown_pct = {"zakat": 0, "infak": 0, "wakaf": 0}
@@ -574,8 +579,10 @@ def get_audit_trail(company=None, limit=10):
             gl.debit,
             gl.credit,
             gl.posting_date,
-            gl.account
+            gl.account,
+            acc.account_name AS allocation_name
         FROM `tabGL Entry` gl
+        LEFT JOIN `tabAccount` acc ON acc.name = gl.account
         WHERE gl.company = %(company)s
           AND gl.is_cancelled = 0
           AND gl.voucher_type IN ('Journal Entry', 'Payment Entry')
@@ -604,7 +611,7 @@ def get_audit_trail(company=None, limit=10):
             label = _('Disbursement (Outgoing)')
             tone  = 'amber'
 
-        acc = frappe.db.get_value('Account', r.account, 'account_name') or r.account or '-'
+        acc = r.allocation_name or r.account or '-'
 
         entries.append({
             'ref':        r.ref,
@@ -819,3 +826,33 @@ def get_pilar_names(pilar, company=None):
         """, {"company": company, "accounts": tuple(accounts)}, as_dict=True)[0].get("c") or 0
 
     return {"names": names, "total": int(total), "capped": int(total) > len(names)}
+
+
+# ------------------------------------------------------------------
+# Cache singkat (20 detik) untuk KPI yang dipanggil berulang saat
+# membuka workspace. Cache dibersihkan oleh `bench clear-cache`.
+# ------------------------------------------------------------------
+def _cached_kpi(ttl=20):
+    def decorator(fn):
+        @functools.wraps(fn)
+        def wrapper(company=None, *args, **kwargs):
+            key_company = company or frappe.defaults.get_user_default("company") or "default"
+            cache_key = f"erpx:kpi:{fn.__name__}:{key_company}"
+            cached = frappe.cache.get_value(cache_key)
+            if cached is not None:
+                return cached
+            value = fn(company, *args, **kwargs)
+            frappe.cache.set_value(cache_key, value, expires_in_sec=ttl)
+            return value
+
+        return wrapper
+
+    return decorator
+
+
+for _kpi_name in ("get_kpi_cash_bank", "get_kpi_ziswaf", "get_kpi_mustahik", "get_kpi_amil"):
+    _original = globals().get(_kpi_name)
+    if _original:
+        # Wrapper baru harus didaftarkan ulang sebagai method whitelisted,
+        # kalau tidak Frappe menolak dengan 403 (Method Not Allowed).
+        globals()[_kpi_name] = frappe.whitelist()(_cached_kpi(20)(_original))
