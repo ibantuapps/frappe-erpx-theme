@@ -767,3 +767,56 @@ window.erpx_custom = window.erpx_custom || {};
     });
   }
 })();
+
+
+/* ------------------------------------------------------------
+   Workspace edit: tombol "Full width" untuk SEMUA widget
+   (custom block, shortcut, links, chart, dll).
+   Tombol mengubah class kolom blok menjadi col-xs-12, sehingga
+   lebarnya tersimpan sebagai 12 kolom saat workspace disimpan.
+   ------------------------------------------------------------ */
+(function () {
+  function set_full_width(block) {
+    Array.from(block.classList).forEach(function (cls) {
+      if (/^col-/.test(cls)) block.classList.remove(cls);
+    });
+    block.classList.add("col-xs-12");
+    block.dataset.erpxFull = "1";
+  }
+
+  function add_button(block) {
+    if (!block || block.querySelector(".erpx-full-btn")) return;
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "erpx-full-btn";
+    btn.title = "Full width";
+    btn.innerHTML = "&#10530;";
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      set_full_width(block);
+    });
+    block.appendChild(btn);
+  }
+
+  function scan() {
+    document
+      .querySelectorAll(".codex-editor__redactor .ce-block")
+      .forEach(add_button);
+  }
+
+  var timer = null;
+  function schedule() {
+    clearTimeout(timer);
+    timer = setTimeout(scan, 200);
+  }
+
+  if (window.MutationObserver) {
+    var observer = new MutationObserver(schedule);
+    document.addEventListener("DOMContentLoaded", function () {
+      observer.observe(document.body, { childList: true, subtree: true });
+      schedule();
+    });
+  }
+  if (window.jQuery) jQuery(document).on("page-change", schedule);
+})();

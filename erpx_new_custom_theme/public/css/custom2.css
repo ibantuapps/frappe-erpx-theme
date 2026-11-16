@@ -1628,3 +1628,499 @@ html.erpx-booting #page-Workspaces .desk-sidebar {
   font-size: 11px !important;
   padding: 2px 8px !important;
 }
+
+/* ============================================================
+   Workspace widgets — modern & tenang (Nov 2026)
+   Tujuan: permukaan bersih, radius konsisten, tanpa efek "loncat",
+   hierarki judul jelas, dan item link yang mudah dipindai.
+   ============================================================ */
+.codex-editor__redactor {
+  gap: 20px !important;
+}
+
+.widget,
+.workspace-widget,
+.links-widget-box,
+.shortcut-widget-box,
+.chart-widget-box,
+.number-card-widget-box,
+.custom-html-block {
+  background: #ffffff !important;
+  border: 1px solid #e6ebf2 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  padding: 18px 20px !important;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease !important;
+  transform: none !important;
+}
+
+.widget:hover,
+.workspace-widget:hover,
+.links-widget-box:hover,
+.shortcut-widget-box:hover {
+  background: #ffffff !important;
+  border-color: #cfd9e6 !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06) !important;
+  transform: none !important;
+}
+
+.widget-title,
+.widget-head,
+.workspace-section-head {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: #0f172a !important;
+  margin: 0 0 12px !important;
+  padding: 0 !important;
+  border-bottom: none !important;
+}
+
+.widget-body {
+  padding-top: 2px !important;
+}
+
+/* Shortcut card */
+.widget.shortcut-widget-box .widget-title {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #11213b !important;
+}
+
+/* Links card */
+.widget.links-widget-box .widget-body {
+  padding-top: 2px !important;
+}
+
+.widget.links-widget-box .link-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-height: 46px !important;
+  padding: 8px 10px !important;
+  margin: 0 !important;
+  border-bottom: none !important;
+  border-radius: 10px !important;
+  transition: background 0.12s ease !important;
+}
+
+.widget.links-widget-box .link-item + .link-item {
+  margin-top: 2px !important;
+}
+
+.widget.links-widget-box .link-item:hover {
+  background: #f5f8fc !important;
+}
+
+.widget.links-widget-box .link-item .link-text {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #1e293b !important;
+}
+
+.widget.links-widget-box .link-item .link-content {
+  gap: 8px !important;
+}
+
+.widget.links-widget-box .link-item .link-icon,
+.widget.links-widget-box .link-item .erpx-link-icon {
+  width: 30px !important;
+  height: 30px !important;
+  flex: 0 0 30px !important;
+  border-radius: 8px !important;
+  background: #eef3fb !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.widget.links-widget-box .link-item .link-icon svg,
+.widget.links-widget-box .link-item .erpx-link-icon svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.widget.links-widget-box .link-item .erpx-link-icon img {
+  width: 16px !important;
+  height: 16px !important;
+  object-fit: contain !important;
+}
+
+/* Fokus keyboard tetap terlihat */
+.widget a:focus-visible,
+.widget .link-item:focus-visible,
+.widget.shortcut-widget-box:focus-visible {
+  outline: 2px solid #11213b !important;
+  outline-offset: 2px !important;
+}
+
+/* Card Links: separator tipis antar item (modern, inset) */
+.widget.links-widget-box .link-item {
+  position: relative !important;
+  border-bottom: none !important;
+}
+
+.widget.links-widget-box .link-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 50px;
+  right: 10px;
+  bottom: 0;
+  height: 1px;
+  background: #edf1f7;
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   Workspace widget "Full width"
+   Frappe hanya mengatur .full-width untuk grid-col-2; pada
+   grid-col-3/1 widget tetap selebar 1 kolom. Tambahkan span
+   penuh agar custom block & shortcut bisa full satu tampilan.
+   ============================================================ */
+.workspace-body .grid-col-3 .full-width:not(.edit-mode),
+.workspace-body .grid-col-1 .full-width:not(.edit-mode),
+.workspace-body .grid-col-2 .full-width:not(.edit-mode) {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+@media (max-width: 768px) {
+  .workspace-body .grid-col-2 .full-width {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+/* Widget "full-width" ada di dalam .ce-block; yang menentukan lebar
+   di workspace adalah .ce-block (Bootstrap col-*). Jadi induknya juga
+   harus dibuat 100%, bukan hanya .widget-nya. */
+/* Hanya paksa penuh saat READ-ONLY (bukan edit mode), supaya
+   resizer/col-* di editor tetap bisa mengecilkan widget. */
+.ce-block.col-xs-12:not([class*="col-sm-"]):not([class*="col-md-"]):not([class*="col-lg-"]):has(.full-width):not(:has(.edit-mode)) {
+  flex: 0 0 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  grid-column: 1 / -1 !important;
+}
+
+.ce-block:has(.full-width) .ce-block__content,
+.ce-block:has(.full-width) .widget {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* ============================================================
+   Workspace editor: hilangkan "batas kanan" pada widget.
+   EditorJS memberi margin negatif + padding dalam; kita ratakan
+   supaya redactor & blok memakai lebar penuh area konten.
+   ============================================================ */
+.codex-editor,
+.codex-editor__redactor {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.codex-editor__redactor {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.ce-block,
+.ce-block__content {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.ce-block__content {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+#editorjs .ce-block:last-child .ce-block__content,
+.workspace-body .ce-block:last-child .ce-block__content {
+  padding-bottom: 0 !important;
+}
+
+/* ============================================================
+   Resizer widget workspace (spacer bisa, custom block & shortcut
+   juga harus bisa). Perbesar area klik + pastikan di atas widget.
+   ============================================================ */
+.ce-block {
+  position: relative !important;
+}
+
+.ce-block .ce-block__content .resizer {
+  z-index: 60 !important;
+  width: 16px !important;
+  right: -8px !important;
+  border-color: transparent !important;
+  cursor: col-resize !important;
+}
+
+.ce-block .ce-block__content .resizer:hover,
+.ce-block:hover .ce-block__content .resizer {
+  border-right: 3px solid #94a3b8 !important;
+}
+
+/* Saat edit, widget tidak boleh menutupi handle resizer */
+.ce-block .widget.edit-mode {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+
+/* Tombol Full width pada blok workspace (muncul saat edit) */
+.ce-block .erpx-full-btn {
+  display: none;
+  position: absolute;
+  top: 6px;
+  right: 22px;
+  z-index: 80;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #11213b;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+.ce-block:has(.edit-mode) .erpx-full-btn {
+  display: inline-flex;
+}
+
+.ce-block .erpx-full-btn:hover {
+  border-color: #11213b;
+  background: #f8fafc;
+}
+
+/* ============================================================
+   Workspace: widget dalam satu baris saling mengisi (balance).
+   Bootstrap col-* menyisakan ruang bila total kolom < 12;
+   flex-grow membuat sisa ruang dibagi rata ke widget di baris itu.
+   ============================================================ */
+.codex-editor__redactor {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+}
+
+/* Hanya di view mode: saat edit, lebar tetap persis col-* agar
+   resizer bekerja akurat. */
+.codex-editor__redactor .ce-block:not(:has(.edit-mode)) {
+  flex-grow: 1 !important;
+  flex-shrink: 1 !important;
+  max-width: 100% !important;
+  min-width: min(280px, 100%) !important;
+}
+
+/* Layout grid (widget-group lama): auto-fit supaya track kosong
+   tidak menyisakan ruang di kanan. */
+.workspace-body .grid-col-3,
+.workspace-body .grid-col-1 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+}
+
+/* ============================================================
+   Sidebar workspace — modern & clean (Nov 2026)
+   - navy lebih dalam + gradien halus
+   - item transparan, hover lembut, selected pill
+   - tipografi & jarak konsisten
+   ============================================================ */
+
+@media (min-width: 992px) {
+  html body div.layout-side-section:has(.desk-sidebar) {
+    background: #0f1b2d !important;
+  }
+
+  html body .layout-side-section:has(.desk-sidebar) .desk-sidebar {
+    background: linear-gradient(180deg, #14253f 0%, #0f1b2d 100%) !important;
+    padding: 6px 0 18px !important;
+  }
+
+  /* logo */
+  html body .layout-side-section:has(.desk-sidebar) .desk-sidebar::before {
+    height: 52px;
+    margin: 20px 24px 34px;
+    border-radius: 14px;
+    background-size: 38px 38px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
+  html body .layout-side-section:has(.desk-sidebar) .desk-sidebar::after {
+    top: 86px;
+    font-size: 10.5px;
+    letter-spacing: 0.4px;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* section label */
+  html body div.layout-side-section:has(.desk-sidebar) .standard-sidebar-label {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    color: rgba(255, 255, 255, 0.42) !important;
+    padding: 16px 26px 6px !important;
+  }
+
+  /* item */
+  html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar-item.standard-sidebar-item {
+    margin: 0 14px 2px !important;
+    padding: 8px 12px !important;
+    min-height: 40px !important;
+    border-radius: 10px !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+    transition: background 0.15s ease, box-shadow 0.15s ease !important;
+  }
+
+  html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar-item.standard-sidebar-item:not(.selected):hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: transparent !important;
+  }
+
+  html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar-item.standard-sidebar-item.selected {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: transparent !important;
+    box-shadow: inset 3px 0 0 0 #7fa7d9 !important;
+  }
+
+  html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar-item .sidebar-item-label {
+    font-size: 13px !important;
+    font-weight: 450 !important;
+    color: rgba(255, 255, 255, 0.82) !important;
+    letter-spacing: 0.01em;
+  }
+
+  html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar-item.selected .sidebar-item-label {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+  }
+
+  html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar-item .sidebar-item-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+    opacity: 0.75;
+    transition: opacity 0.15s ease;
+  }
+
+  html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar-item:hover .sidebar-item-icon svg,
+  html body div.layout-side-section:has(.desk-sidebar) .desk-sidebar-item.selected .sidebar-item-icon svg {
+    opacity: 1;
+  }
+
+  /* submenu */
+  html body .layout-side-section:has(.desk-sidebar) .sidebar-child-item.nested-container {
+    margin-left: 26px !important;
+    padding-left: 10px !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  /* scrollbar tipis */
+  html body .layout-side-section:has(.desk-sidebar) .desk-sidebar::-webkit-scrollbar {
+    width: 4px;
+  }
+  html body .layout-side-section:has(.desk-sidebar) .desk-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 4px;
+  }
+}
+
+/* ============================================================
+   Shortcut widget — lebih hidup, tidak terasa kosong
+   ============================================================ */
+.widget.shortcut-widget-box {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  min-height: 96px !important;
+  padding: 18px 18px 18px 74px !important;
+  border-radius: 14px !important;
+  border: 1px solid #e6ebf2 !important;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%) !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease !important;
+}
+
+.widget.shortcut-widget-box::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  width: 42px;
+  height: 42px;
+  transform: translateY(-50%);
+  border-radius: 12px;
+  background-color: #eef3fb;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2311213b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7'/%3E%3Cpath d='M8 7h9v9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px 20px;
+  transition: background-color 0.16s ease;
+}
+
+.widget.shortcut-widget-box:hover {
+  border-color: #cfd9e6 !important;
+  background: #ffffff !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06) !important;
+}
+
+.widget.shortcut-widget-box:hover::before {
+  background-color: #e3ecfb;
+}
+
+.widget.shortcut-widget-box .widget-head {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.widget.shortcut-widget-box .widget-title {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #11213b !important;
+  line-height: 1.35 !important;
+  margin: 0 !important;
+  padding-right: 46px !important;
+}
+
+.widget.shortcut-widget-box .widget-title .ellipsis {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+.widget.shortcut-widget-box .widget-body {
+  display: none !important;
+}
+
+.widget.shortcut-widget-box .widget-control {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+}
+
+.widget.shortcut-widget-box .indicator-pill {
+  background: #eef3fb !important;
+  color: #11213b !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  padding: 2px 8px !important;
+}
+
+.widget.shortcut-widget-box .widget-control .es-icon,
+.widget.shortcut-widget-box .widget-control svg {
+  color: #94a3b8 !important;
+  stroke: #94a3b8 !important;
+}
