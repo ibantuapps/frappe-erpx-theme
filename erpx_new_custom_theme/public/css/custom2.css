@@ -2394,3 +2394,307 @@ textarea.form-control {
   font-size: 13.5px !important;
   color: #334155 !important;
 }
+
+/* ============================================================
+   Sidebar brand header (horizontal, rata kiri)
+   Menggantikan kotak putih selebar sidebar (::before/::after).
+   ============================================================ */
+html body .layout-side-section:has(.desk-sidebar) .desk-sidebar::before,
+html body .layout-side-section:has(.desk-sidebar) .desk-sidebar::after {
+  content: none !important;
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+html body .erpx-sidebar-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 20px 20px 16px 26px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-sizing: border-box !important;
+}
+
+html body .erpx-sidebar-brand .erpx-brand-logo {
+  width: 40px !important;
+  height: 40px !important;
+  flex: 0 0 40px !important;
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  display: grid !important;
+  place-items: center !important;
+  overflow: hidden !important;
+}
+
+html body .erpx-sidebar-brand .erpx-brand-logo img {
+  width: 24px !important;
+  height: 24px !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+html body .erpx-sidebar-brand .erpx-brand-text {
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1px !important;
+}
+
+html body .erpx-sidebar-brand .erpx-brand-name {
+  color: #ffffff !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+html body .erpx-sidebar-brand .erpx-brand-sub {
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  line-height: 1.3 !important;
+  white-space: nowrap !important;
+}
+
+/* Jarak header ke label section pertama */
+html body .desk-sidebar .standard-sidebar-label:first-of-type {
+  padding-top: 20px !important;
+}
+
+/* Collapse (mini rail): hanya ikon, di tengah */
+html body.erpx-sidebar-mini .erpx-sidebar-brand {
+  justify-content: center !important;
+  padding: 16px 0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html body.erpx-sidebar-mini .erpx-sidebar-brand .erpx-brand-text {
+  display: none !important;
+}
+
+/* ============================================================
+   Form sidebar kanan (.form-sidebar.overlay-sidebar) — modern
+   ============================================================ */
+.form-sidebar.overlay-sidebar {
+  background: #ffffff !important;
+  border-left: 1px solid #e8edf4 !important;
+  padding: 14px 12px 18px !important;
+  box-shadow: -10px 0 30px rgba(15, 23, 42, 0.04) !important;
+}
+
+.form-sidebar.overlay-sidebar .sidebar-menu {
+  margin: 0 0 6px !important;
+  padding: 0 !important;
+}
+
+.form-sidebar.overlay-sidebar .sidebar-menu > li {
+  padding: 7px 8px !important;
+  margin: 0 0 2px !important;
+  border-radius: 8px !important;
+  transition: background 0.12s ease !important;
+}
+
+.form-sidebar.overlay-sidebar .sidebar-menu > li:hover {
+  background: #f8fafc !important;
+}
+
+.form-sidebar.overlay-sidebar .form-sidebar-items {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  min-height: 26px !important;
+}
+
+.form-sidebar.overlay-sidebar .form-sidebar-items > span:first-child,
+.form-sidebar.overlay-sidebar .share-label,
+.form-sidebar.overlay-sidebar .add-assignment-label {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+}
+
+.form-sidebar.overlay-sidebar .sidebar-menu .es-icon,
+.form-sidebar.overlay-sidebar .sidebar-menu svg {
+  width: 15px !important;
+  height: 15px !important;
+  color: #94a3b8 !important;
+  stroke: #94a3b8 !important;
+  flex: 0 0 auto !important;
+}
+
+.form-sidebar.overlay-sidebar .sidebar-menu .pill-label,
+.form-sidebar.overlay-sidebar .sidebar-menu .tags-label,
+.form-sidebar.overlay-sidebar .sidebar-menu .ellipsis {
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: #475569 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.form-sidebar.overlay-sidebar .sidebar-label,
+.form-sidebar.overlay-sidebar .followed-by-label {
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #94a3b8 !important;
+  padding: 12px 8px 4px !important;
+}
+
+.form-sidebar.overlay-sidebar .sidebar-menu .icon-btn {
+  width: 26px !important;
+  height: 26px !important;
+  min-height: 26px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  opacity: 0.7 !important;
+  transition: background 0.12s ease, opacity 0.12s ease !important;
+}
+
+.form-sidebar.overlay-sidebar .sidebar-menu .icon-btn:hover {
+  background: #eef2f7 !important;
+  border-color: #e2e8f0 !important;
+  opacity: 1 !important;
+}
+
+/* Attachment / share / assignment rows */
+.form-sidebar.overlay-sidebar .attachment-row,
+.form-sidebar.overlay-sidebar .share-row,
+.form-sidebar.overlay-sidebar .assignment-row {
+  padding: 6px 8px !important;
+  border-radius: 7px !important;
+  font-size: 12.5px !important;
+  color: #475569 !important;
+}
+
+.form-sidebar.overlay-sidebar .attachment-row:hover,
+.form-sidebar.overlay-sidebar .share-row:hover {
+  background: #f8fafc !important;
+}
+
+.form-sidebar.overlay-sidebar .sidebar-menu + .sidebar-menu {
+  border-top: 1px solid #f1f5f9 !important;
+  padding-top: 6px !important;
+  margin-top: 4px !important;
+}
+
+/* Scrollbar tipis */
+.form-sidebar.overlay-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+.form-sidebar.overlay-sidebar::-webkit-scrollbar-thumb {
+  background: #dbe2ec;
+  border-radius: 5px;
+}
+
+/* ============================================================
+   Form timeline (.new-timeline) — modern
+   ============================================================ */
+.new-timeline {
+  position: relative !important;
+  padding-top: 8px !important;
+  --timeline-badge-bg: #eef3fb;
+  --timeline-badge-color: #11213b;
+}
+
+.new-timeline:before {
+  border-left: 1px solid #eef2f7 !important;
+  left: 14px !important;
+}
+
+.new-timeline .timeline-item {
+  margin-bottom: 12px !important;
+}
+
+.new-timeline .timeline-badge {
+  width: 28px !important;
+  height: 28px !important;
+  border: 1px solid #e2e8f0 !important;
+  background: #eef3fb !important;
+  box-shadow: none !important;
+}
+
+.new-timeline .timeline-badge .icon,
+.new-timeline .timeline-badge svg {
+  width: 14px !important;
+  height: 14px !important;
+  stroke: #11213b !important;
+  color: #11213b !important;
+}
+
+.new-timeline .timeline-content {
+  margin-left: 12px !important;
+  padding: 4px 8px !important;
+  max-width: 100% !important;
+}
+
+.new-timeline .timeline-content.frappe-card {
+  margin: 8px 0 8px 12px !important;
+  padding: 12px 14px !important;
+  background: #ffffff !important;
+  border: 1px solid #e8edf4 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+}
+
+.new-timeline .timeline-content .content {
+  font-size: 13px !important;
+  color: #334155 !important;
+  line-height: 1.6 !important;
+}
+
+.new-timeline .timeline-item b,
+.new-timeline .timeline-content b {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+.new-timeline .timeline-item .text-muted,
+.new-timeline .timeline-item .timeline-item-time {
+  color: #94a3b8 !important;
+  font-size: 11px !important;
+}
+
+.new-timeline .action-buttons {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+}
+
+.new-timeline .action-btn {
+  font-size: 11.5px !important;
+  color: #94a3b8 !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 6px !important;
+  padding: 3px 8px !important;
+  box-shadow: none !important;
+}
+
+.new-timeline .action-btn:hover {
+  color: #11213b !important;
+  background: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+
+.new-timeline .timeline-item .avatar,
+.new-timeline .timeline-item .avatar-frame {
+  border-radius: 50% !important;
+  overflow: hidden !important;
+}

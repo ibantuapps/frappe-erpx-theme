@@ -53,6 +53,11 @@ def boot_session(bootinfo):
 	except Exception:
 		bootinfo.erpx_app_logo = None
 
+	# Nama entitas untuk brand header sidebar.
+	bootinfo.erpx_company_name = (
+		frappe.defaults.get_user_default("company") or frappe.local.site
+	)
+
 	if frappe.session.user == "Guest":
 		return
 

@@ -820,3 +820,71 @@ window.erpx_custom = window.erpx_custom || {};
   }
   if (window.jQuery) jQuery(document).on("page-change", schedule);
 })();
+
+
+/* ------------------------------------------------------------
+   Brand header sidebar: [ikon 40x40] Nama entitas
+                                    Powered by ERPX
+   Struktur menu tidak diubah; hanya menambahkan header di atas.
+   ------------------------------------------------------------ */
+(function () {
+  var FALLBACK_LOGO = "/assets/frappe/images/frappe-framework-logo.svg";
+
+  function logo_url() {
+    return (window.frappe && frappe.boot && frappe.boot.erpx_app_logo) || FALLBACK_LOGO;
+  }
+
+  function company_name() {
+    if (window.frappe && frappe.boot && frappe.boot.erpx_company_name) {
+      return frappe.boot.erpx_company_name;
+    }
+    return (window.frappe && frappe.defaults.get_user_default("company")) || "ERPX";
+  }
+
+  function render_brand() {
+    var side = document.querySelector(".desk-sidebar");
+    if (!side) return;
+
+    var brand = side.querySelector(".erpx-sidebar-brand");
+    if (!brand) {
+      brand = document.createElement("div");
+      brand.className = "erpx-sidebar-brand";
+      brand.innerHTML =
+        '<span class="erpx-brand-logo"><img alt=""></span>' +
+        '<span class="erpx-brand-text">' +
+        '<span class="erpx-brand-name"></span>' +
+        '<span class="erpx-brand-sub">Powered by ERPX</span>' +
+        "</span>";
+      side.insertBefore(brand, side.firstElementChild);
+    }
+
+    var name = company_name();
+    var img = brand.querySelector("img");
+    if (img && img.getAttribute("src") !== logo_url()) img.src = logo_url();
+    var nameEl = brand.querySelector(".erpx-brand-name");
+    if (nameEl && nameEl.textContent !== name) {
+      nameEl.textContent = name;
+      nameEl.title = name;
+    }
+  }
+
+  var timer = null;
+  function schedule() {
+    clearTimeout(timer);
+    timer = setTimeout(render_brand, 150);
+  }
+
+  if (window.jQuery) {
+    jQuery(document).on("page-change", schedule);
+    jQuery(document).ready(schedule);
+  }
+  if (window.MutationObserver) {
+    document.addEventListener("DOMContentLoaded", function () {
+      new MutationObserver(schedule).observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+      schedule();
+    });
+  }
+})();
