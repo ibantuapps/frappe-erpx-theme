@@ -2124,3 +2124,273 @@ html.erpx-booting #page-Workspaces .desk-sidebar {
   color: #94a3b8 !important;
   stroke: #94a3b8 !important;
 }
+
+/* ============================================================
+   Navbar search (input-group search-bar) — modern
+   ============================================================ */
+.navbar .input-group.search-bar {
+  max-width: 420px !important;
+  width: 420px !important;
+  margin: 0 16px !important;
+  position: relative !important;
+}
+
+.navbar .input-group.search-bar .awesomplete {
+  width: 100% !important;
+}
+
+.navbar .input-group.search-bar .awesomplete input,
+.navbar .input-group.search-bar input#navbar-search {
+  height: 38px !important;
+  width: 100% !important;
+  padding: 0 14px 0 40px !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.01em !important;
+  box-shadow: none !important;
+  transition: background 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease !important;
+}
+
+.navbar .input-group.search-bar .awesomplete input:hover {
+  background: #f1f5f9 !important;
+  border-color: #b6c2d2 !important;
+}
+
+.navbar .input-group.search-bar .awesomplete input:focus {
+  background: #ffffff !important;
+  border-color: #94a3b8 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 0 0 3px rgba(23, 44, 79, 0.10) !important;
+  outline: none !important;
+}
+
+.navbar .input-group.search-bar input::placeholder {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+
+.navbar .input-group.search-bar .search-icon {
+  left: 0 !important;
+  margin-left: 14px !important;
+  color: #94a3b8 !important;
+  pointer-events: none !important;
+}
+
+.navbar .input-group.search-bar .search-icon svg {
+  width: 16px !important;
+  height: 16px !important;
+  stroke: #94a3b8 !important;
+}
+
+/* Dropdown hasil pencarian */
+.navbar .input-group.search-bar .awesomplete ul {
+  margin-top: 6px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12) !important;
+  overflow: hidden !important;
+  padding: 6px !important;
+}
+
+.navbar .input-group.search-bar .awesomplete ul li {
+  border-radius: 8px !important;
+  padding: 8px 10px !important;
+}
+
+/* ============================================================
+   Awesomplete dropdown (awesomebar results) — modern
+   ============================================================ */
+.awesomplete_list_1 {
+  margin-top: 6px !important;
+  padding: 6px !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.14) !important;
+  max-height: 420px !important;
+  overflow-y: auto !important;
+}
+
+.awesomplete_list_1 li {
+  display: block !important;
+  margin: 1px 0 !important;
+  padding: 10px 12px !important;
+  border: none !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: #0f172a !important;
+  font-size: 13px !important;
+  line-height: 1.35 !important;
+  cursor: pointer !important;
+  transition: background 0.12s ease !important;
+}
+
+.awesomplete_list_1 li:hover,
+.awesomplete_list_1 li[aria-selected="true"] {
+  background: #f1f5f9 !important;
+}
+
+.awesomplete_list_1 li mark,
+.awesomplete_list_1 li b {
+  background: transparent !important;
+  color: #11213b !important;
+  font-weight: 700 !important;
+}
+
+.awesomplete_list_1 li .text-muted {
+  color: #94a3b8 !important;
+  font-size: 11.5px !important;
+  line-height: 1.4 !important;
+}
+
+.awesomplete_list_1 li .ellipsis {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.awesomplete_list_1::-webkit-scrollbar {
+  width: 6px;
+}
+.awesomplete_list_1::-webkit-scrollbar-thumb {
+  background: #d7dee8;
+  border-radius: 6px;
+}
+
+/* ============================================================
+   Navbar dropdown (profil / notifikasi / menu) — modern
+   ============================================================ */
+.navbar .dropdown-menu.show,
+.navbar .dropdown-menu.dropdown-menu-right.show {
+  min-width: 220px !important;
+  margin-top: 8px !important;
+  padding: 6px !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.14) !important;
+}
+
+.navbar .dropdown-menu .dropdown-item {
+  padding: 9px 12px !important;
+  border-radius: 8px !important;
+  color: #1e293b !important;
+  font-size: 13px !important;
+  line-height: 1.35 !important;
+  transition: background 0.12s ease !important;
+}
+
+.navbar .dropdown-menu .dropdown-item:hover,
+.navbar .dropdown-menu .dropdown-item:focus {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.navbar .dropdown-menu .dropdown-divider {
+  margin: 6px 4px !important;
+  border-top-color: #eef2f7 !important;
+}
+
+.navbar .dropdown-menu .dropdown-header {
+  padding: 8px 12px 4px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: #94a3b8 !important;
+}
+
+/* Notifikasi */
+.navbar .dropdown-menu .notification-list,
+.navbar .dropdown-menu .notifications-list {
+  padding: 4px !important;
+}
+
+.navbar .dropdown-menu .notification-item,
+.navbar .dropdown-menu .notification-list .notification-item {
+  padding: 10px 12px !important;
+  border-radius: 8px !important;
+  border-bottom: none !important;
+}
+
+.navbar .dropdown-menu .notification-item:hover {
+  background: #f8fafc !important;
+}
+
+/* ============================================================
+   Form controls — modern (inputs, textarea, select)
+   ============================================================ */
+.form-control,
+input.form-control,
+textarea.form-control,
+select.form-control {
+  min-height: 40px !important;
+  padding: 9px 12px !important;
+  border: 1px solid #d9e1ea !important;
+  border-radius: 10px !important;
+  background: #fbfcfe !important;
+  color: #0f172a !important;
+  font-size: 13.5px !important;
+  font-family: inherit !important;
+  box-shadow: inset 0 1px 1px rgba(15, 23, 42, 0.02) !important;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.form-control:hover:not(:disabled):not([readonly]) {
+  border-color: #c2ccd9 !important;
+  background: #ffffff !important;
+}
+
+.form-control:focus {
+  border-color: #11213b !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(23, 44, 79, 0.10) !important;
+  outline: none !important;
+}
+
+.form-control::placeholder {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+
+.form-control:disabled,
+.form-control[readonly],
+.form-control.disabled {
+  background: #f4f7fb !important;
+  border-color: #e6ebf2 !important;
+  color: #94a3b8 !important;
+  box-shadow: none !important;
+}
+
+textarea.form-control {
+  border-radius: 12px !important;
+  min-height: 96px !important;
+  line-height: 1.55 !important;
+  resize: vertical !important;
+}
+
+/* Validasi */
+.has-error .form-control,
+.form-control.is-invalid,
+.form-control.invalid {
+  border-color: #dc2626 !important;
+  background: #fff !important;
+}
+.has-error .form-control:focus,
+.form-control.is-invalid:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12) !important;
+}
+
+/* Read-only value (control-value) */
+.frappe-control .like-disabled-input,
+.frappe-control .control-value {
+  border: 1px solid #e6ebf2 !important;
+  border-radius: 10px !important;
+  background: #f8fafc !important;
+  font-size: 13.5px !important;
+  color: #334155 !important;
+}
