@@ -2698,3 +2698,8 @@ html body.erpx-sidebar-mini .erpx-sidebar-brand .erpx-brand-text {
   border-radius: 50% !important;
   overflow: hidden !important;
 }
+
+/* Sembunyikan menu Help di navbar */
+.dropdown-help {
+  display: none !important;
+}
